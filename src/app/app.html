@@ -1,0 +1,10 @@
+<app-navbar></app-navbar>
+<router-outlet></router-outlet>
+ @for (notification of notifications | async;  track notification.id) {
+        <app-notification
+          [title]="notification.title"
+          [message]="notification.message"
+          [type]="notification.type"
+          [durationMs]="notification.durationMs ?? 5000"
+        ></app-notification>
+      }

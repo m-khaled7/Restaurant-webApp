@@ -1,0 +1,206 @@
+<div class="min-h-screen flex items-center justify-center bg-linear-to-t from-gray-50 to-second">
+  <form
+    class="flex flex-col items-start justify-center p-10 rounded-3xl w-[450px]"
+    [formGroup]="registerForm"
+    (ngSubmit)="submit(registerForm)"
+  >
+    <h1 class="text-5xl py-2">Sign Up</h1>
+
+    <div class="my-8 w-full">
+      <label for="name">Name</label><br />
+      <input
+        formControlName="name"
+        id="name"
+        type="text"
+        placeholder="Enter your name"
+        class="p-3 placeholder-gray-400 hover:border-primary focus:placeholder-transparent focus:border-primary focus:outline-none transition border border-gray-400 rounded-lg bg-white w-full"
+      />
+
+      @if (name?.invalid && (name?.dirty || name?.touched)) {
+            <div class="alert">
+              @if (name?.hasError('required')) {
+                <p class="text-sm text-red-600 mt-1"><i class="fa-solid fa-circle-exclamation"></i>  Name is required.</p>
+              }
+              @if (name?.hasError('minlength')) {
+                <p class="text-sm text-red-600 mt-1">
+                  <i class="fa-solid fa-circle-exclamation"></i>Name must be at least 3 characters long.
+                </p>
+              }
+              @if (name?.hasError('maxlength')) {
+                <p class="text-sm text-red-600 mt-1">
+                 <i class="fa-solid fa-circle-exclamation"></i> Name must be less than 20 characters long.
+                </p>
+              }
+            </div>
+          }
+      <label  for="email">Email</label><br />
+      <input
+        formControlName="email"
+        id="email"
+        type="email"
+        placeholder="Enter your email"
+        class="p-3  placeholder-gray-400 focus:placeholder-transparent hover:border-primary focus:border-primary focus:outline-none transition border border-gray-400 rounded-lg bg-white w-full"
+      />
+          @if (email?.invalid && (email?.dirty || email?.touched)) {
+            <div class="alert">
+              @if (email?.hasError('required')) {
+                <p class="text-sm text-red-600 mt-1"><i class="fa-solid fa-circle-exclamation"></i>  email is required.</p>
+              }
+              @if (email?.hasError('email')) {
+                <p class="text-sm text-red-600 mt-1">
+                  <i class="fa-solid fa-circle-exclamation"></i>Enter valid email
+                </p>
+              }
+            </div>
+          }
+
+      <label for="password">Password</label><br />
+      <div class="relative w-full max-w-sm">
+        <input
+          formControlName="password"
+          id="password"
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Enter your password"
+          class="p-3 placeholder-gray-400 focus:placeholder-transparent hover:border-primary focus:border-primary focus:outline-none transition border border-gray-400 rounded-lg bg-white w-full"
+        />
+        <!-- Toggle button -->
+        <button
+          type="button"
+          (click)="togglePassword()"
+          class="absolute inset-y-0 right-2 flex items-center text-gray-500 hover:text-gray-700"
+        >
+          @if (!showPassword) {
+          <!-- Eye icon (password hidden) -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+            />
+          </svg>
+          } @else {
+          <!-- Eye-off icon (password visible) -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.97 9.97 0 012.093-3.362M9.88 9.88a3 3 0 104.24 4.24M6.1 6.1l11.8 11.8"
+            />
+          </svg>
+          }
+        </button>
+        
+      </div>
+      @if (password?.invalid && (password?.dirty || password?.touched)) {
+            <div class="alert">
+              @if (password?.hasError('required')) {
+                <p class="text-sm text-red-600 mt-1"><i class="fa-solid fa-circle-exclamation"></i> password is required.</p>
+              }
+              @if (password?.hasError('pattern')) {
+                <p class="text-sm text-red-600 mt-1">
+                  password shoud contain at least<br>
+                  <i class="fa-solid fa-circle-exclamation"></i>One uppercase character<br>
+                  <i class="fa-solid fa-circle-exclamation"></i>One lowercase character<br>
+                  <i class="fa-solid fa-circle-exclamation"></i>One uppercase character<br>
+                  <i class="fa-solid fa-circle-exclamation"></i>8 character long
+                  
+                </p>
+              }
+            </div>
+          }
+      <label for="confirm-password">Confirm Password</label><br />
+      <div class="relative w-full mb-4 max-w-sm">
+        <input
+          formControlName="password_confirmation"
+          id="confirm-password"
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Enter your password again"
+          class="p-3 placeholder-gray-400 focus:placeholder-transparent hover:border-primary focus:border-primary focus:outline-none transition border border-gray-400 rounded-lg bg-white w-full"
+        />
+        <!-- Toggle button -->
+        <button
+          type="button"
+          (click)="togglePassword()"
+          class="absolute inset-y-0 right-2 flex items-center text-gray-500 hover:text-gray-700"
+        >
+          @if (!showPassword) {
+          <!-- Eye icon (password hidden) -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+            />
+          </svg>
+          } @else {
+          <!-- Eye-off icon (password visible) -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.97 9.97 0 012.093-3.362M9.88 9.88a3 3 0 104.24 4.24M6.1 6.1l11.8 11.8"
+            />
+          </svg>
+          }
+        </button>
+      </div>
+      @if (registerForm.hasError('passwordsMismatch') && registerForm.get('password_confirmation')?.touched) {
+      <p class="text-sm text-red-600 mt-1">Passwords do not match</p>
+    }
+    </div>
+    <div class="flex flex-col items-center justify-center w-full">
+      <button
+        type="submit"
+        class="px-12 py-2 mb-6 bg-primary rounded-lg text-xl cursor-pointer hover:bg-primary-70"
+        
+      >
+        @if(isLoading){
+        <i class="fas fa-spinner fa-spin"></i>
+        }@else{
+        <span>Register</span>
+        }
+      </button>
+      <p>you have an account? <a class="text-primary" routerLink="/login"> Login </a></p>
+    </div>
+  </form>
+</div>
