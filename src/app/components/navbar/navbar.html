@@ -14,9 +14,9 @@
     <a routerLink="/cart"><i class="fa-solid fa-cart-shopping mx-2 text-primary hover:text-primary-70"></i></a>
     <a routerLink="/wishlist"><i class="fa-solid fa-heart mx-5 text-primary hover:text-primary-70"></i></a>
     @if (isLogin) {
-    <button  class="bg-primary  px-4 py-1 rounded-md hover:bg-primary-70" (click)="logout()">LogOut</button>
+    <button  class="bg-primary  px-4 py-1 rounded-md hover:bg-primary-70 cursor-pointer" (click)="logout()">LogOut</button>
     }@else{
-    <a routerLink="/login" class="bg-primary h-6 w-16 px-4 py-2 rounded-md hover:bg-primary-70">Login</a>
+    <a routerLink="/login" class="bg-primary h-6 w-16 px-4 py-2 rounded-md hover:bg-primary-70 cursor-pointer">Login</a>
     }
   </div>
 </div>

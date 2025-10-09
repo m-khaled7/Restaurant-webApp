@@ -9,28 +9,54 @@
       class="flex flex-col w-96 md:w-2xl md:flex-row md:justify-between bg-white p-4 rounded-2xl"
     >
       <div class="flex flex-row">
-        <img class="h-[112px] w-[112px] bg-second rounded-xl" [src]="item.product.image[0]" alt="">
-        
+        <img
+          class="h-[112px] w-[112px] bg-second rounded-xl"
+          [src]="item.product.image[0]"
+          alt=""
+        />
+
         <div class="flex flex-col sm:min-w-40 justify-between px-4 py-1">
           <span>
-            <h1 class="text-xl">{{item.product.name}}</h1>
+            <h1 class="text-xl">{{ item.product.name }}</h1>
             <h2>size</h2>
           </span>
           <!-- details -->
-          <h2 class="text-lg">{{item.product.price}}</h2>
+          @if(item.product.discountedPrice){
+          <h5 class="text-xl font-bold text-primary py-1">
+            {{ item.product.discountedPrice | currency : 'EGP' }}
+            <span class="text-sm text-gray-400 line-through">{{
+              item.product.price | currency : 'EGP'
+            }}</span>
+          </h5>
+
+          }@else{
+          <h5 class="text-xl font-bold text-primary py-1">
+            {{ item.product.price | currency : 'EGP' }}
+          </h5>
+
+          }
         </div>
       </div>
       <div class="flex sm:flex-row md:flex-col justify-between items-center py-5 px-2">
         <div class="flex items-center">
-          <button class="bg-black text-white w-8 h-8 rounded-full cursor-pointer hover:bg-gray-700">
+          <button
+            class="bg-black text-white w-8 h-8 rounded-full cursor-pointer hover:bg-gray-700"
+            (click)="decreaseQuantity(item.product._id, item.quantity)"
+          >
             <i class="fa-solid fa-minus"></i>
           </button>
-          <span class="w-8 h-8 text-2xl text-center rounded-full">{{item.quantity}}</span>
-          <button class="bg-black text-white w-8 h-8 rounded-full cursor-pointer hover:bg-gray-700">
+          <span class="w-8 h-8 text-2xl text-center rounded-full">{{ item.quantity }}</span>
+          <button
+            class="bg-black text-white w-8 h-8 rounded-full cursor-pointer hover:bg-gray-700"
+            (click)="increaseQuantity(item.product._id, item.quantity)"
+          >
             <i class="fa-solid fa-plus"></i>
           </button>
         </div>
-        <button class="text-gray-500 hover:text-red-700 cursor-pointer">
+        <button
+          class="text-gray-500 hover:text-red-700 cursor-pointer"
+          (click)="removeItem(item.product._id)"
+        >
           <i class="fa-solid fa-xmark"></i> Remove
         </button>
       </div>

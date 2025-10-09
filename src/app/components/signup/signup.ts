@@ -9,9 +9,7 @@ import {
   ValidatorFn,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth-service';
-
-import { Router } from '@angular/router';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NotificationService } from '../../services/notification-service';
 
 @Component({
@@ -88,7 +86,7 @@ export class Signup {
           if (data.success) {
             localStorage.setItem('verifyToken', data.token);
             this.isLoading = false;
-          this._NotificationService.show("ERROR", data.message, 'error');
+            this._NotificationService.show('ERROR', data.message, 'error');
 
             this._Router.navigate(['/verify-email']);
           } else {
@@ -96,13 +94,11 @@ export class Signup {
           }
         },
         error: (e) => {
-          console.log(e)
-          if(e.error.message){
-          this._NotificationService.show("ERROR", e.error.message, 'error');
-
-          }else{
-          this._NotificationService.show(e.name, e.message, 'error');
-
+          console.log(e);
+          if (e.error.message) {
+            this._NotificationService.show('ERROR', e.error.message, 'error');
+          } else {
+            this._NotificationService.show(e.name, e.message, 'error');
           }
           this.isLoading = false;
         },

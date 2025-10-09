@@ -58,6 +58,14 @@ export class UserService {
     return this._HttpClient.delete(this.apiUrl + '/cart/remove/' + ID, this.getAuthHeaderOptions());
   }
 
+  updateQuantity(ID:string,quantity:number): Observable<any> {
+    return this._HttpClient.patch(
+      this.apiUrl + '/cart/update/'+ID,
+      { quantity: quantity },
+      this.getAuthHeaderOptions()
+    );
+  }
+
   clearCart(): Observable<any> {
     return this._HttpClient.delete(this.apiUrl + '/cart/clear', this.getAuthHeaderOptions());
   }

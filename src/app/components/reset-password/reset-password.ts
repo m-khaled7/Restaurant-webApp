@@ -11,7 +11,6 @@ import {
 import { AuthService } from '../../services/auth-service';
 
 import { Router ,ActivatedRoute } from '@angular/router';
-import { RouterLink } from '@angular/router';
 import { NotificationService } from '../../services/notification-service';
 
 @Component({

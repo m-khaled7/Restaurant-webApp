@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { NotificationComponent } from '../notification/notification';
 
 
 @Component({
   selector: 'app-about',
-  imports: [NotificationComponent],
+  imports: [],
   templateUrl: './about.html',
   styleUrl: './about.css'
 })

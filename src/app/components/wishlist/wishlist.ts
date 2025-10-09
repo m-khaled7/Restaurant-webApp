@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user-service';
 import { AuthService } from '../../services/auth-service';
 import { NotificationService } from '../../services/notification-service';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-wishlist',
-  imports: [],
+  imports: [CurrencyPipe],
   templateUrl: './wishlist.html',
   styleUrl: './wishlist.css',
 })

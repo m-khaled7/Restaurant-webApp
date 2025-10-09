@@ -1,19 +1,18 @@
 import { Component } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth-service';
 import { NotificationService } from '../../services/notification-service';
 
 @Component({
   selector: 'app-forget-password',
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [ ReactiveFormsModule],
   templateUrl: './forget-password.html',
   styleUrl: './forget-password.css',
 })
 export class ForgetPassword {
   constructor(
     private _AuthService: AuthService,
-    private _Router: Router,
     private _NotificationService: NotificationService
   ) {}
   isLoading: boolean = false;
