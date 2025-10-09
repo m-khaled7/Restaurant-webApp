@@ -5,61 +5,38 @@ import { AuthService } from '../../services/auth-service';
 import { NotificationService } from '../../services/notification-service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-forget-password',
   imports: [RouterLink, ReactiveFormsModule],
-  templateUrl: './login.html',
-  styleUrl: './login.css',
+  templateUrl: './forget-password.html',
+  styleUrl: './forget-password.css',
 })
-export class Login {
+export class ForgetPassword {
   constructor(
     private _AuthService: AuthService,
     private _Router: Router,
     private _NotificationService: NotificationService
   ) {}
-  showPassword = false;
   isLoading: boolean = false;
 
-  loginForm = new FormGroup({
+  forgetPasswordForm = new FormGroup({
     email: new FormControl(null, [Validators.email, Validators.required]),
-    password: new FormControl(null, [
-      Validators.required,
-      Validators.pattern(
-          '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'
-        ),
-    ]),
   });
-
   get email() {
-    return this.loginForm.get('email');
+    return this.forgetPasswordForm.get('email');
   }
-  get password() {
-    return this.loginForm.get('password');
-  }
-  togglePassword() {
-    this.showPassword = !this.showPassword;
-  }
-
-  submit(loginForm: FormGroup) {
+   submit(forgetPasswordForm: FormGroup) {
     this.isLoading = true;
-    if (loginForm.valid) {
-      this._AuthService.login(loginForm.value).subscribe({
+    if (forgetPasswordForm.valid) {
+      this._AuthService.forgetPassword(forgetPasswordForm.value).subscribe({
         next: (data) => {
           if (data.success) {
-            localStorage.setItem('userToken', data.token);
-            this._AuthService.saveUserData();
             this.isLoading = false;
-            this._Router.navigate(['/home']);
+            this._NotificationService.show('success', data.message, 'success');
           } else {
             this.isLoading = false;
           }
         },
         error: (e) => {
-          if (e.error.message === 'Please Verify Your Email') {
-            this._NotificationService.show('ERROR', e.error.message, 'error');
-            localStorage.setItem('verifyToken', e.error.token);
-            this.isLoading = false;
-            this._Router.navigate(['/verify-email']);
-          }
           if (e.error.message) {
             this._NotificationService.show('ERROR', e.error.message, 'error');
           } else {
@@ -69,7 +46,7 @@ export class Login {
         },
       });
     } else {
-      this.loginForm.markAllAsTouched();
+      this.forgetPasswordForm.markAllAsTouched();
       this.isLoading = false;
     }
   }

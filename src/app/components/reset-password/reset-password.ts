@@ -10,38 +10,33 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth-service';
 
-import { Router } from '@angular/router';
+import { Router ,ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { NotificationService } from '../../services/notification-service';
 
 @Component({
-  selector: 'app-signup',
-  imports: [ReactiveFormsModule, RouterLink],
-  templateUrl: './signup.html',
-  styleUrl: './signup.css',
+  selector: 'app-reset-password',
+  imports: [ReactiveFormsModule],
+  templateUrl: './reset-password.html',
+  styleUrl: './reset-password.css'
 })
-export class Signup {
-  constructor(
+export class ResetPassword {
+ constructor(
     private _AuthService: AuthService,
     private _Router: Router,
-    private _NotificationService: NotificationService
+    private _NotificationService: NotificationService,
+    private _ActivatedRoute:ActivatedRoute
   ) {}
-
-  isLoading: boolean = false;
+   isLoading: boolean = false;
   showPassword = false;
 
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
 
-  registerForm: FormGroup = new FormGroup(
+    resetPasswordForm: FormGroup = new FormGroup(
     {
-      name: new FormControl(null, [
-        Validators.minLength(3),
-        Validators.maxLength(20),
-        Validators.required,
-      ]),
-      email: new FormControl(null, [Validators.email, Validators.required]),
+      
       password: new FormControl(null, [
         Validators.required,
         Validators.pattern(
@@ -59,15 +54,8 @@ export class Signup {
       validators: [this.passwordsMatchValidator()],
     }
   );
-
-  get name() {
-    return this.registerForm.get('name');
-  }
-  get email() {
-    return this.registerForm.get('email');
-  }
   get password() {
-    return this.registerForm.get('password');
+    return this.resetPasswordForm.get('password');
   }
 
   passwordsMatchValidator(): ValidatorFn {
@@ -80,17 +68,21 @@ export class Signup {
     };
   }
 
-  submit(registerForm: FormGroup) {
+
+
+  submit(resetPasswordForm: FormGroup) {
     this.isLoading = true;
-    if (registerForm.valid) {
-      this._AuthService.signup(registerForm.value).subscribe({
+    let token
+    this._ActivatedRoute.queryParams.subscribe(params => {
+    token=params['token'];
+  });
+    if (resetPasswordForm.valid) {
+      this._AuthService.resetPassword({token,...resetPasswordForm.value}).subscribe({
         next: (data) => {
           if (data.success) {
-            localStorage.setItem('verifyToken', data.token);
-            this.isLoading = false;
-          this._NotificationService.show("ERROR", data.message, 'error');
-
-            this._Router.navigate(['/verify-email']);
+          this.isLoading = false;
+          this._NotificationService.show("SUCCESS", data.message, 'success');
+          this._Router.navigate(['/login']);
           } else {
             this.isLoading = false;
           }
@@ -108,8 +100,9 @@ export class Signup {
         },
       });
     } else {
-      this.registerForm.markAllAsTouched();
+      this.resetPasswordForm.markAllAsTouched();
       this.isLoading = false;
     }
   }
+
 }

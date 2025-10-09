@@ -1,58 +1,33 @@
-<div class="min-h-screen p-20 p">
+<div class="min-h-screen flex pt-16">
 
-    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4  gap-4 w-fit mx-auto">
+    <div class="bg-white p-4  w-72">
+        <h4 class="text-2xl text-center pb-3 tracking-wider text-primary">Filters</h4>
+        <div class="h-10 w-full rounded-xl my-3 bg-primary-30 border border-primary"></div>
+        <div class="h-10 w-full rounded-xl my-3 border border-gray-300 hover:border-primary"></div>
+    </div>
+        
+    <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4 pt-16 gap-4 w-fit mx-auto">
+    @for (product of productsList; track $index) {
+
         <div class="bg-white w-64 h-80 rounded-2xl p-4 shadow-md border border-primary " (click)="details()" >
-            <div class="w-full h-40 bg-second rounded-lg"></div>
+            
+            <img class="w-full h-40 bg-second rounded-lg object-cover" [src]="product.image[0]" alt="">
             <div class="py-1">
-                <h1 class="text-lg font-bold py-1">Pasta</h1>
-                <h1 class="text-xl font-bold text-primary py-1">350</h1>
+                <h1 class="text-lg font-bold py-1">{{product.name}}</h1>
+                @if(product.discountedPrice){
+                <h5 class="text-xl font-bold text-primary py-1">{{product.discountedPrice | currency:'EGP'}} <span class="text-sm text-gray-400 line-through">{{product.price| currency:'EGP'}}</span></h5>
+
+                }@else{
+                <h5 class="text-xl font-bold text-primary py-1">{{product.price | currency:'EGP'}}</h5>
+
+                }
                 <div class="py-2">
-                    <button class="bg-second w-[103px] px-4 py-2 mr-2 rounded-md">Wishlist</button>
-                    <button class="bg-primary w-[103px] px-4 py-2 ml-2 rounded-md" (click)="cart()">Cart</button>
+                    <button class="bg-second w-[103px] px-4 py-2 mr-2 rounded-md hover:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed disabled:hover:bg-second cursor-pointer"  [disabled]="!isLogin" (click)="wishlist(product._id); $event.stopPropagation()">Wishlist</button>
+                    <button class="bg-primary w-[103px] px-4 py-2 ml-2 rounded-md hover:bg-primary-70 disabled:text-gray-700 disabled:cursor-not-allowed disabled:hover:bg-primary cursor-pointer" [disabled]="!isLogin" (click)="cart(product._id); $event.stopPropagation()">Cart</button>
                 </div>
             </div>
         </div>
-        <div class="bg-white w-64 h-80 rounded-2xl p-4 shadow-md border border-primary " >
-            <div class="w-full h-40 bg-second rounded-lg"></div>
-            <div class="py-1">
-                <h1 class="text-lg font-bold py-1">Pasta</h1>
-                <h1 class="text-xl font-bold text-primary py-1">350</h1>
-                <div class="py-2">
-                    <button class="bg-second w-[103px] px-4 py-2 mr-2 rounded-md hover:bg-gray-300">Wishlist</button>
-                    <button class="bg-primary w-[103px] px-4 py-2 ml-2 rounded-md hover:bg-primary-70">Cart</button>
-                </div>
-            </div>
-        </div>
-        <div class="bg-white w-64 h-80 rounded-2xl p-4 shadow-md border border-primary " >
-            <div class="w-full h-40 bg-second rounded-lg"></div>
-            <div class="py-1">
-                <h1 class="text-lg font-bold py-1">Pasta</h1>
-                <h1 class="text-xl font-bold text-primary py-1">350</h1>
-                <div class="py-2">
-                    <button class="bg-second w-[103px] px-4 py-2 mr-2 rounded-md">Wishlist</button>
-                    <button class="bg-primary w-[103px] px-4 py-2 ml-2 rounded-md">Cart</button>
-                </div>
-            </div>
-        </div><div class="bg-white w-64 h-80 rounded-2xl p-4 shadow-md border border-primary " >
-            <div class="w-full h-40 bg-second rounded-lg"></div>
-            <div class="py-1">
-                <h1 class="text-lg font-bold py-1">Pasta</h1>
-                <h1 class="text-xl font-bold text-primary py-1">350</h1>
-                <div class="py-2">
-                    <button class="bg-second w-[103px] px-4 py-2 mr-2 rounded-md">Wishlist</button>
-                    <button class="bg-primary w-[103px] px-4 py-2 ml-2 rounded-md">Cart</button>
-                </div>
-            </div>
-        </div><div class="bg-white w-64 h-80 rounded-2xl p-4 shadow-md border border-primary " >
-            <div class="w-full h-40 bg-second rounded-lg"></div>
-            <div class="py-1">
-                <h1 class="text-lg font-bold py-1">Pasta</h1>
-                <h1 class="text-xl font-bold text-primary py-1">350</h1>
-                <div class="py-2">
-                    <button class="bg-second w-[103px] px-4 py-2 mr-2 rounded-md">Wishlist</button>
-                    <button class="bg-primary w-[103px] px-4 py-2 ml-2 rounded-md">Cart</button>
-                </div>
-            </div>
-        </div>
+    }
+
     </div>
 </div>

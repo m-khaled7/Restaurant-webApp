@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from '../../../services/auth-service';
-import { NotificationService } from '../../../services/notification-service';
+import { AuthService } from '../../services/auth-service';
+import { NotificationService } from '../../services/notification-service';
 
 @Component({
   selector: 'app-verify-code',

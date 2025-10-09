@@ -1,6 +1,6 @@
 import { Component, OnInit, } from '@angular/core';
 import {RouterLink,RouterLinkActive } from '@angular/router';
-import { AuthService } from '../../../services/auth-service';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-navbar',
@@ -22,6 +22,10 @@ export class Navbar implements OnInit {
         }
       }
     })
+  }
+
+  logout(){
+    this._AuthService.logout()
   }
 
 }
