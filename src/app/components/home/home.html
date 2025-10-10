@@ -1,8 +1,128 @@
-<div class="min-h-screen flex flex-col items-start justify-center p-4 px-32 bg-center  bg-cover bg-no-repeat" style="background-image: url(home.jpg);">
-    <h3 class="text-primary text-3xl ">Welcome To</h3>
-    <h1 class="text-black font-bold text-7xl" > Guasto Restaurant</h1>
-    <h1 class="text-black font-bold py-4 text-7xl" > And Enjoy the <span class="text-primary">Food</span></h1>
-    <p class="py-4 text-lg text-gray-700">we are an italian food fancy restaurant founded in egypt via profesional italian chefs and food lovers,<br>
-    And specailized in intreducing the most delicious dishes from the best cuisine aroung the world</p>
+<main class="flex flex-col min-h-screen">
+  <div class="container mx-auto">
+    <!-- Hero Section -->
+    <div class="min-h-screen relative">
+      <!-- Background Image -->
+      <div class="absolute inset-0 bg-image" style="background-image: url(home.jpg)"></div>
 
-</div>
+      <!-- Content -->
+      <div
+        class="relative z-10 flex flex-col items-start justify-center min-h-screen p-4 md:px-16 lg:px-32 bg-gradient-to-r from-white/90 via-white/80 to-transparent"
+      >
+        <h3 class="text-primary text-xl md:text-3xl">Welcome To</h3>
+        <h1 class="text-black font-bold text-4xl md:text-6xl lg:text-7xl">Guasto Restaurant</h1>
+        <h1 class="text-black font-bold py-4 text-4xl md:text-6xl lg:text-7xl">
+          And Enjoy the <span class="text-primary">Food</span>
+        </h1>
+        <p
+          class="py-4 text-base md:text-lg text-gray-700 max-w-xl bg-white/60 p-6 rounded-lg backdrop-blur-sm"
+        >
+          We are an Italian food fancy restaurant founded in Egypt via professional Italian chefs
+          and food lovers, specialized in introducing the most delicious dishes from the best
+          cuisine around the world
+        </p>
+      </div>
+    </div>
+
+    <!-- About Section -->
+    <app-about></app-about>
+
+    <!-- Chefs Section -->
+    <app-chefs></app-chefs>
+
+    <!-- Testimonials Section -->
+    <app-testimonials></app-testimonials>
+
+    <!-- Contact Section -->
+    <section class="py-16 px-4 md:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Contact Us</h2>
+        <p class="text-gray-600">Get in touch with us for reservations or inquiries</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Contact Form -->
+        <div class="bg-white p-8 rounded-lg shadow-lg">
+          <form class="space-y-6">
+            <div>
+              <label for="name" class="block text-gray-700 mb-2">Name</label>
+              <input
+                type="text"
+                id="name"
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary"
+              />
+            </div>
+            <div>
+              <label for="email" class="block text-gray-700 mb-2">Email</label>
+              <input
+                type="email"
+                id="email"
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary"
+              />
+            </div>
+            <div>
+              <label for="message" class="block text-gray-700 mb-2">Message</label>
+              <textarea
+                id="message"
+                rows="4"
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary"
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              class="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary-dark transition-colors"
+            >
+              Send Message
+            </button>
+          </form>
+        </div>
+        <!-- Contact Information -->
+        <div class="bg-white p-8 rounded-lg shadow-lg">
+          <div class="space-y-6">
+            <div class="flex items-start space-x-4">
+              <div class="text-primary text-2xl">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-2">Location</h4>
+                <p class="text-gray-600">123 Restaurant Street, Cairo, Egypt</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="text-primary text-2xl">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-2">Phone</h4>
+                <p class="text-gray-600">+201062842697</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="text-primary text-2xl">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-2">Email</h4>
+                <p class="text-gray-600">mohamedbasyonydawood@gmail.com</p>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4">
+              <div class="text-primary text-2xl">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-2">Opening Hours</h4>
+                <p class="text-gray-600">
+                  Monday - Friday: 9:00 AM - 10:00 PM<br />
+                  Saturday - Sunday: 10:00 AM - 11:00 PM
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+</main>

@@ -1,0 +1,13 @@
+:host {
+    display: block;
+  }
+  
+  /* Smooth slide animation for mobile menu */
+  .fixed {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  /* Hide scrollbar for mobile menu */
+  .fixed::-webkit-scrollbar {
+    display: none;
+  }

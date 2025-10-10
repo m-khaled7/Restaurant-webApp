@@ -1,0 +1,58 @@
+/* Background Image Optimization */
+.bg-image {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Smooth transitions */
+.transition-opacity {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.transition-colors {
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+/* Chef card hover effects */
+.group:hover .opacity-0 {
+  opacity: 1;
+}
+
+/* Form input focus styles */
+input:focus,
+textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
+}
+
+/* Container max-width control */
+.container {
+  max-width: 1440px;
+}
+
+/* Testimonial card hover effect */
+.testimonial {
+  transition: transform 0.3s ease-in-out;
+}
+
+.testimonial:hover {
+  transform: translateY(-5px);
+}
+
+/* Hero section overlay */
+.hero-overlay {
+  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9));
+}
+
+/* Responsive padding adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

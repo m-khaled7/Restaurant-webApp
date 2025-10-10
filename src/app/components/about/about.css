@@ -1,0 +1,25 @@
+/* Animation for hover effects */
+.transition-transform {
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Custom shadows for cards */
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Ensure icons maintain consistent size */
+.text-5xl {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+/* Ensure container doesn't get too wide on very large screens */
+.container {
+  max-width: 1440px;
+}
+
+/* Add subtle gradient background */
+.bg-white {
+  background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+}

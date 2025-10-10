@@ -1,15 +1,49 @@
-<div
-  class="flex justify-between items-center h-16 w-full px-32 fixed top-0 right-0 left-0 bg-white"
->
-  <a routerLink="/">
-    <img src="logo.png" class="h-12 w-fit" alt="logo" />
-  </a>
-  <div class="text-gray-700 text-lg">
-    <a routerLink="/home" routerLinkActive="text-primary" class="mx-6 hover:text-primary">Home</a>
-    <a routerLink="/menu" routerLinkActive="text-primary" class="mx-6 hover:text-primary">Menu</a>
-    <a routerLink="/contacts" routerLinkActive="text-primary" class="mx-6 hover:text-primary">Contacts</a>
-    <a routerLink="/about" routerLinkActive="text-primary" class="mx-6 hover:text-primary">About</a>
+<div class="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+  <!-- Desktop Navbar -->
+  <div class="hidden md:flex justify-between items-center h-20 w-full px-8 lg:px-32">
+    <a routerLink="/" class="flex items-center">
+      <img src="logo.png" class="h-14 w-auto" alt="logo" />
+    </a>
+
+    <nav class="flex items-center space-x-1 lg:space-x-4">
+      <a
+        *ngFor="let item of navItems"
+        [routerLink]="item.path"
+        routerLinkActive="text-primary border-b-2 border-primary"
+        class="px-3 py-2 text-gray-700 hover:text-primary transition-colors duration-200 font-medium text-base relative group"
+      >
+        {{ item.label }}
+        <span
+          class="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-200"
+        ></span>
+      </a>
+    </nav>
+
+    <div class="flex items-center space-x-4">
+      <a routerLink="/cart">
+        <i class="fa-solid fa-cart-shopping text-xl text-primary hover:text-primary-70"></i>
+      </a>
+      <a routerLink="/wishlist">
+        <i class="fa-solid fa-heart text-xl text-primary hover:text-primary-70"></i>
+      </a>
+      @if (isLogin) {
+        <button
+          class="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-70 transition"
+          (click)="logout()"
+        >
+          Log Out
+        </button>
+      } @else {
+        <a
+          routerLink="/login"
+          class="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-70 transition"
+        >
+          Login
+        </a>
+      }
+    </div>
   </div>
+<<<<<<< HEAD
   <div>
     <a routerLink="/cart"><i class="fa-solid fa-cart-shopping mx-2 text-primary hover:text-primary-70"></i></a>
     <a routerLink="/wishlist"><i class="fa-solid fa-heart mx-5 text-primary hover:text-primary-70"></i></a>
@@ -18,5 +52,82 @@
     }@else{
     <a routerLink="/login" class="bg-primary h-6 w-16 px-4 py-2 rounded-md hover:bg-primary-70 cursor-pointer">Login</a>
     }
+=======
+
+  <!-- Mobile Navbar -->
+  <div class="md:hidden flex justify-between items-center h-16 px-4 bg-white border-b">
+    <a routerLink="/" class="flex items-center">
+      <img src="logo.png" class="h-10 w-auto" alt="logo" />
+    </a>
+    <button
+      (click)="toggleMobileMenu()"
+      class="text-gray-700 hover:text-primary focus:outline-none p-2 rounded-lg transition-colors duration-200"
+    >
+      <i class="fas fa-bars text-2xl"></i>
+    </button>
+  </div>
+
+  <!-- Simple Overlay -->
+  <div
+    *ngIf="isMobileMenuOpen"
+    class="fixed inset-0 bg-black/10 backdrop-blur-[2px] z-40 transition-all duration-200"
+    (click)="toggleMobileMenu()"
+  ></div>
+
+  <!-- Mobile Menu -->
+  <div
+    class="fixed top-0 right-0 w-64 h-full bg-white z-50 transform transition-transform duration-300 ease-in-out shadow-xl"
+    [class.translate-x-0]="isMobileMenuOpen"
+    [class.translate-x-full]="!isMobileMenuOpen"
+  >
+    <div class="flex justify-between items-center p-4 border-b">
+      <h2 class="text-xl font-semibold text-gray-800">Menu</h2>
+      <button
+        (click)="toggleMobileMenu()"
+        class="text-gray-700 hover:text-primary focus:outline-none"
+      >
+        <i class="fas fa-times text-2xl"></i>
+      </button>
+    </div>
+
+    <div class="py-4">
+      <a
+        *ngFor="let item of navItems"
+        [routerLink]="item.path"
+        routerLinkActive="text-primary"
+        class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-primary"
+        (click)="toggleMobileMenu()"
+      >
+        {{ item.label }}
+      </a>
+
+      <div class="flex items-center space-x-4 mt-4 px-4">
+        <a routerLink="/cart">
+          <i class="fa-solid fa-cart-shopping text-xl text-primary hover:text-primary-70"></i>
+        </a>
+        <a routerLink="/wishlist">
+          <i class="fa-solid fa-heart text-xl text-primary hover:text-primary-70"></i>
+        </a>
+      </div>
+
+      <div class="mt-6 px-4">
+        @if (isLogin) {
+          <button
+            class="bg-primary text-white w-full py-2 rounded-md hover:bg-primary-70 transition"
+            (click)="logout()"
+          >
+            Log Out
+          </button>
+        } @else {
+          <a
+            routerLink="/login"
+            class="bg-primary text-white w-full py-2 rounded-md hover:bg-primary-70 text-center block transition"
+          >
+            Login
+          </a>
+        }
+      </div>
+    </div>
+>>>>>>> 07aa549 (adding chef,testimonials,mobilenavbar and footer)
   </div>
 </div>

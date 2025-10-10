@@ -1,12 +1,22 @@
 import { Component } from '@angular/core';
+<<<<<<< HEAD
 import { RouterLink } from '@angular/router';
+=======
+import { Router } from '@angular/router';
+>>>>>>> 07aa549 (adding chef,testimonials,mobilenavbar and footer)
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth-service';
 import { NotificationService } from '../../services/notification-service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-forget-password',
+<<<<<<< HEAD
   imports: [ ReactiveFormsModule],
+=======
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+>>>>>>> 07aa549 (adding chef,testimonials,mobilenavbar and footer)
   templateUrl: './forget-password.html',
   styleUrl: './forget-password.css',
 })
@@ -23,7 +33,7 @@ export class ForgetPassword {
   get email() {
     return this.forgetPasswordForm.get('email');
   }
-   submit(forgetPasswordForm: FormGroup) {
+  submit(forgetPasswordForm: FormGroup) {
     this.isLoading = true;
     if (forgetPasswordForm.valid) {
       this._AuthService.forgetPassword(forgetPasswordForm.value).subscribe({

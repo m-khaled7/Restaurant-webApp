@@ -1,0 +1,23 @@
+/* Smooth hover transitions */
+a {
+  transition: color 0.3s ease;
+}
+
+/* Social media icon hover effects */
+.fab {
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.fab:hover {
+  transform: translateY(-3px);
+}
+
+/* Ensure footer stays at bottom */
+footer {
+  margin-top: auto;
+}
+
+/* Add subtle gradient to background */
+.bg-gray-900 {
+  background: linear-gradient(180deg, #1a202c 0%, #111827 100%);
+}
