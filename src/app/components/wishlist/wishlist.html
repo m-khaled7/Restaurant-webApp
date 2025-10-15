@@ -1,38 +1,76 @@
-<div class="min-h-screen w-screen flex flex-col items-center pt-20  bg-linear-to-t from-gray-50 to-second">
-  <h1 class="text-3xl my-6"><i class="fa-solid fa-heart mx-1"></i>Wishlist</h1>
-  <div class="grid gap-4 grid-cols-1 md:grid-cols-2  lg:grid-cols-3 ">
-    @for (item of whishlist; track $index) {
-      <div class="bg-white h-36 w-[350px]  rounded-2xl p-3 m-3 flex shadow-md border border-primary">
-      
-      <img class="bg-second w-[120px] rounded-lg grow-0 mr-3 object-cover" [src]="item.product.image[0]" alt="">
-      <div class="grow py-2 flex flex-col justify-between">
-        <h1 class="text-xl">{{item.product.name}}</h1>
-         @if(item.product.discountedPrice){
-          <h5 class="text-xl font-bold text-primary py-1">
-            {{ item.product.discountedPrice | currency : 'EGP' }}
-            <span class="text-sm text-gray-400 line-through">{{
-              item.product.price 
-            }}</span>
-          </h5>
+<div
+  class="min-h-screen w-screen flex flex-col items-center  pt-20 bg-linear-to-t from-gray-50 to-second"
+>
+  <h1 class="text-3xl my-6 flex items-center">
+    <i class="fa-solid fa-heart mx-1"></i>Wishlist
+    @if (count) { <span class="ml-1">( {{ count }} )</span> }
+  </h1>
 
-          }@else{
-          <h5 class="text-xl font-bold text-primary py-1">
-            {{ item.product.price | currency : 'EGP' }}
-          </h5>
+  <section class="md:col-span-2 bg-white rounded-2xl p-6 shadow-lg w-full max-w-5xl">
 
-          }
-          <div class="flex w-full justify-end">
-            <i class="fa-solid fa-cart-plus mx-4 p-1.5 rounded-full text-primary bg-amber-00 cursor-pointer" (click)="cart(item.product._id)"></i>
-            <i class="fa-solid fa-trash p-1.5 rounded-full text-red-500 bg-red-200 cursor-pointer" (click)="deleteItem(item.product._id)"></i>
-          </div>
-        
-      </div>
+    <!-- Table header -->
+    <div class="hidden md:flex items-center text-sm text-gray-500 border-b px-4 pb-3 mb-4">
+      <div class="w-3/6">Product</div>
+      <div class="w-1/6 text-center">Price</div>
+      <div class="w-1/6 text-center">Cart</div>
+      <div class="w-1/6 text-center">Action</div>
     </div>
-    }
-    
 
+    <!-- Cart items -->
+    <ul class="space-y-4">
+      @for (item of whishlist.items; track $index) {
+      <li
+        class="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 rounded-xl border border-gray-100 cursor-pointer"
+        (click)="details(item.product._id)"
+      >
+        <!-- Product -->
+        <div class="flex items-center gap-4 w-full md:w-3/6">
+          <img [src]="item.product.image[0]" class="w-20 h-20 rounded-lg object-cover" />
+          <div>
+            <div class="font-semibold text-gray-800">{{ item.product.name }}</div>
+            <div class="text-sm text-gray-500 line-clamp-1">{{ item.product.description }}</div>
+          </div>
+        </div>
 
-  </div>
+        <!-- Price -->
+        <div class="w-full md:w-1/6 text-center">
+          <div class="font-semibold text-gray-800">
+            @if(item.product.discountedPrice) {
+              {{ item.product.discountedPrice | currency : 'EGP' }}
+            } @else {
+              {{ item.product.price | currency : 'EGP' }}
+            }
+          </div>
+        </div>
 
- 
+        <!-- Cart -->
+        <div class="w-full md:w-1/6 text-center">
+          <button
+            class="text-gray-400 hover:text-green-600"
+            (click)="cart(item.product._id); $event.stopPropagation()"
+          >
+            <i class="fa-solid fa-cart-shopping"></i>
+          </button>
+        </div>
+
+        <!-- Action -->
+        <div class="w-full md:w-1/6 text-center">
+          <button
+            class="text-gray-400 hover:text-red-600"
+            (click)="deleteItem(item.product._id); $event.stopPropagation()"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+      </li>
+      }
+    </ul>
+  </section>
 </div>

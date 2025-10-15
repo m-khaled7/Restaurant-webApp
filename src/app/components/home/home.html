@@ -1,8 +1,70 @@
-<div class="min-h-screen flex flex-col items-start justify-center p-4 px-32 bg-center  bg-cover bg-no-repeat" style="background-image: url(home.jpg);">
-    <h3 class="text-primary text-3xl ">Welcome To</h3>
-    <h1 class="text-black font-bold text-7xl" > Guasto Restaurant</h1>
-    <h1 class="text-black font-bold py-4 text-7xl" > And Enjoy the <span class="text-primary">Food</span></h1>
-    <p class="py-4 text-lg text-gray-700">we are an italian food fancy restaurant founded in egypt via profesional italian chefs and food lovers,<br>
-    And specailized in intreducing the most delicious dishes from the best cuisine aroung the world</p>
+<div class="min-h-screen max-w-full flex flex-col items-start justify-center p-4 lg:pl-32 bg-cover bg-no-repeat" style="background-image: url(home.jpg);">
+    <h3 class="text-primary text-3xl  ">Welcome To</h3>
+    <h1 class="text-black font-bold text-5xl lg:text-7xl" > Guasto Restaurant</h1>
+    <h1 class="text-black font-bold py-4 text-5xl lg:text-7xl" > And Enjoy the <span class="text-primary">Food</span></h1>
+    <p class="py-4 text-lg text-gray-700 max-w-lg text-pretty font-serif">We take you on a unique trip of taste, exploring combinations of inherited ingredients that have been taken to another level, reflecting all that Egypt has best to offer.
+ At Guasto, food becomes a common language, bringing together, under one roof, sophisticated recipes that were reimagined to offer a progressive cuisine.</p>
 
 </div>
+
+<app-carousel/>
+
+<section class="max-w-6xl mx-auto px-6 py-16 bg-white">
+  <!-- Title -->
+  <h2 class="text-3xl font-semibold text-center mb-12">
+    Why People Choose us?
+  </h2>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+
+    <!-- Left Image -->
+    <div>
+      <img src="chooseus.png" 
+           alt="Food" 
+           class="w-full rounded-3xl object-cover">
+    </div>
+
+    <!-- Right Features -->
+    <div class="space-y-6">
+
+      <!-- Feature Card -->
+      <div class="flex items-center bg-white p-6 rounded-2xl shadow-sm">
+        <div class="w-16 h-16 flex items-center justify-center rounded-full bg-yellow-100 text-yellow-500 text-2xl mr-6">
+          🚚
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold">Convenient and Reliable</h3>
+          <p class="text-gray-600 text-sm mt-1">
+            Whether you dine in, take out, or order delivery, our service is convenient,
+            fast, and reliable, making mealtime hassle-free.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center bg-white p-6 rounded-2xl shadow-sm">
+        <div class="w-16 h-16 flex items-center justify-center rounded-full bg-yellow-100 text-yellow-500 text-2xl mr-6">
+          🍔
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold">Variety of Options</h3>
+          <p class="text-gray-600 text-sm mt-1">
+            From hearty meals to light snacks, we offer a wide range of options to suit every taste and craving.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center bg-white p-6 rounded-2xl shadow-sm">
+        <div class="w-16 h-16 flex items-center justify-center rounded-full bg-yellow-100 text-yellow-500 text-2xl mr-6">
+          🍟
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold">Eat Burger</h3>
+          <p class="text-gray-600 text-sm mt-1">
+            Our burgers are grilled to perfection, with juicy patties and flavorful toppings that make every bite a delicious experience.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

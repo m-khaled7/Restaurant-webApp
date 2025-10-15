@@ -46,6 +46,7 @@ export class Login {
         next: (data) => {
           if (data.success) {
             localStorage.setItem('userToken', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
             this._AuthService.saveUserData();
             this.isLoading = false;
             this._Router.navigate(['/home']);

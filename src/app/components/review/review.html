@@ -1,0 +1,21 @@
+<div class="flex my-10 rounded-3xl ">
+  <div class="w-10 h-10 bg-gray-700 rounded-full mr-3"></div>
+  <div>
+    <h6 class="text-lg">Mohamed khaled</h6>
+    <app-star-rating [(fixedRating)]="rating"></app-star-rating>
+    <div>
+      <input
+        class="bg-gray-300 my-2 p-1 rounded-full px-3 outline-none"
+        [(ngModel)]="commentText"
+        placeholder="Write your comment..."
+      />
+      <button
+        class="py-1 px-3 mx-2 text-gray-50 bg-primary h-fit my-auto rounded-full hover:bg-primary-70  cursor-pointer"
+        (click)="submit()"
+      >
+        Submit
+      </button>
+    </div>
+  </div>
+  
+</div>

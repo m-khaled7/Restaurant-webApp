@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user-service';
-import { AuthService } from '../../services/auth-service';
 import { NotificationService } from '../../services/notification-service';
 import { CurrencyPipe } from '@angular/common';
+import { Router } from '@angular/router';
+import { Observable, BehaviorSubject } from 'rxjs';
+
+
 
 @Component({
   selector: 'app-wishlist',
@@ -11,46 +14,29 @@ import { CurrencyPipe } from '@angular/common';
   styleUrl: './wishlist.css',
 })
 export class Wishlist implements OnInit {
-  isLogin: boolean = false;
   whishlist: any = [];
+  count:number=0
   constructor(
     private _UserService: UserService,
-    private _AuthService: AuthService,
-    private _NotificationService: NotificationService
+    private _NotificationService: NotificationService,
+    private _Router:Router
   ) {}
   ngOnInit(): void {
-    this._AuthService.userData.subscribe({
-      next: () => {
-        if (this._AuthService.userData.getValue() != null) {
-          this.isLogin = true;
-          this.getItems()
-        } else {
-          this.isLogin = false;
-        }
-      },
-    });
+    this._UserService.loadWishlist()
+    this._UserService.wishlist.subscribe({
+      next:()=>{
+        this.whishlist=this._UserService.wishlist.getValue()
+      }
+    })
   }
 
-  getItems() {
-    this._UserService.getWishlist().subscribe({
-      next: (data) => {
-        this.whishlist = data.items;
-      },
-      error: (e) => {
-        if (e.error.message) {
-          this._NotificationService.show('ERROR', e.error.message, 'error');
-        } else {
-          this._NotificationService.show(e.name, e.message, 'error');
-        }
-      },
-    });
-  }
+
 
   deleteItem(ID: string) {
-    this._UserService.deteteWishlistItem(ID).subscribe({
+    this._UserService.deleteWishlistItem(ID).subscribe({
       next: (data) => {
         this._NotificationService.show('success', data.message, 'success');
-          this.getItems()
+        this._UserService.loadWishlist()
 
       },
       error: (e) => {
@@ -64,7 +50,7 @@ export class Wishlist implements OnInit {
   }
 
   cart(prodID: string) {
-    if (this.isLogin) {
+    
       this._UserService.addCart(prodID).subscribe({
         next: (data) => {
           this._NotificationService.show('SUCCESS', data.message, 'success');
@@ -77,8 +63,9 @@ export class Wishlist implements OnInit {
           }
         },
       });
-    } else {
-      this._NotificationService.show('ERROR', 'please Login frist', 'error');
-    }
+
+  }
+    details(ID:string) {
+    this._Router.navigate(["/menu/"+ID])
   }
 }

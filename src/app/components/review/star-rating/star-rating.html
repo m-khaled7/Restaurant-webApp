@@ -1,0 +1,14 @@
+<div class="flex gap-1 ">
+  @for (star of stars; track star; let i = $index) {
+  <i
+    class="fa-star cursor-pointer text-sm"
+    [ngClass]="{
+      'fa-solid text-primary': i < currentRating,
+      'fa-regular': i >= currentRating
+    }"
+    (mouseover)="onMouseOver(i + 1)"
+    (mouseout)="onMouseOut()"
+    (click)="onClick(i + 1)"
+  ></i>
+  }
+</div>

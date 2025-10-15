@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+
 @theme {
   --color-primary: #FB9337;
   --color-primary-70: #fa7705;

@@ -20,6 +20,7 @@ export class AuthService {
     let encodedToken = JSON.stringify(localStorage.getItem('userToken'));
     let decodedToken = jwtDecode(encodedToken);
     this.userData.next(decodedToken);
+    
   }
 
   private getVerifyToken(): string | null {
@@ -64,6 +65,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('userToken');
+    localStorage.removeItem('user');
     this.userData.next(null);
     this._Router.navigate(['/login']);
   }
@@ -73,4 +75,5 @@ export class AuthService {
   resetPassword(data: object): Observable<any> {
     return this._HttpClient.post(this.apiUrl + '/auth/reset-password', data);
   }
+
 }

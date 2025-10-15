@@ -11,6 +11,8 @@ import { Cart } from './components/cart/cart';
 import { Products } from './components/products/products';
 import { ForgetPassword } from './components/forget-password/forget-password';
 import { ResetPassword } from './components/reset-password/reset-password';
+import { ProductDetails } from './components/product-details/product-details';
+import { Profile } from './components/profile/profile';
 
 export const routes: Routes = [
     {path:"",redirectTo:"home",pathMatch:"full"},
@@ -23,8 +25,10 @@ export const routes: Routes = [
     {path:"wishlist",canActivate:[authGuard],component:Wishlist,title:"wishlist"},
     {path:"cart",canActivate:[authGuard],component:Cart,title:"My Cart"},
     {path:"menu",component:Products,title:"Menu"},
+    {path:"menu/:id",component:ProductDetails,title:"product"},
     {path:"forget-password",component:ForgetPassword,title:"forget password"},
     {path:"reset-password",component:ResetPassword,title:"Reset Password"},
+    {path:"profile",component:Profile,title:"profile"}
     
     
 ];

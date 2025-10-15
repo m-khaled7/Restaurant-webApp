@@ -1,0 +1,25 @@
+
+
+
+/* .dropdown {
+  position: absolute;
+  right: 0;
+  top: 20px;
+  background: white;
+  border: 1px solid #ddd;
+  list-style: none;
+  padding: 5px 0;
+  margin: 0;
+  border-radius: 5px;
+  min-width: 100px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+} */
+
+.dropdown li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.dropdown li:hover {
+  background: #f2f2f2;
+}
