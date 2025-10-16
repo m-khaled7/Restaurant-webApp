@@ -18,6 +18,7 @@ export class VerifyCode {
   ) {}
 
   isLoading: boolean = false;
+  isLoadingResend: boolean = false;
 
   codeForm = new FormGroup({
     code: new FormControl(null, [
@@ -37,24 +38,25 @@ export class VerifyCode {
     if (codeForm.valid) {
       this._AuthService.verifyCode(codeForm.value).subscribe({
         next: (data) => {
-          if (data.success) {
-            this.isLoading = false;
-            localStorage.removeItem('verifyToken');
-            localStorage.setItem('userToken', data.token);
-            this._AuthService.saveUserData();
-            this._NotificationService.show('verified', data.message, 'success');
-            this._Router.navigate(['/home']);
-          } else {
-            this.isLoading = false;
-            this._NotificationService.show('ERROR', 'some thing gose wrong', 'error');
-          }
+          this.isLoading = false;
+          localStorage.removeItem('verifyToken');
+          localStorage.setItem('userToken', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          this._AuthService.saveUserData();
+          this._NotificationService.show(
+            'verified',
+            'your account has been verified successfully',
+            'success'
+          );
+          this._Router.navigate(['/home']);
         },
         error: (e) => {
           if (e.error.message) {
             this._NotificationService.show('ERROR', e.error.message, 'error');
-          } else {
-            this._NotificationService.show(e.name, e.message, 'error');
           }
+          this._NotificationService.show('something wrong', e.name, 'error');
+
+          console.log(e);
           this.isLoading = false;
         },
       });
@@ -64,24 +66,23 @@ export class VerifyCode {
     }
   }
 
-  resendCode() {
+  resendCode(event: Event) {
+    event.preventDefault();
+    this.isLoadingResend = true;
+
     this._AuthService.resendCode().subscribe({
       next: (data) => {
-        if (data.success) {
-          this.isLoading = false;
-          this._NotificationService.show('Success', data.message, 'success');
-        } else {
-          this.isLoading = false;
-          this._NotificationService.show('ERROR', 'some thing gose wrong', 'error');
-        }
+        this.isLoadingResend = false;
+        this._NotificationService.show('Success', data.message, 'success');
       },
       error: (e) => {
         if (e.error.message) {
           this._NotificationService.show('ERROR', e.error.message, 'error');
-        } else {
-          this._NotificationService.show(e.name, e.message, 'error');
         }
-        this.isLoading = false;
+        this._NotificationService.show('something wrong', e.name, 'error');
+
+        console.log(e);
+        this.isLoadingResend = false;
       },
     });
   }

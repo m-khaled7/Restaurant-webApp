@@ -1,9 +1,7 @@
-import { Injectable, OnInit } from '@angular/core';
-import { AuthService } from './auth-service';
+import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { HttpClient, HttpHeaders,HttpParams } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { jwtDecode } from 'jwt-decode';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,46 +10,34 @@ export class ProductService {
   apiUrl: string = environment.apiUrl;
   constructor(public _HttpClient: HttpClient) {}
 
- getProducts(filters: any = {}): Observable<any> {
-  let params = new HttpParams();
+  getProducts(filters: any = {}): Observable<any> {
+    let params = new HttpParams();
 
-  Object.keys(filters).forEach(key => {
-    const v = filters[key];
-    if (Array.isArray(v)) {
-      v.forEach(item => {
-        params = params.append(key, String(item));
-      });
-    } else if (v !== null && v !== undefined && v !== '') {
-      params = params.set(key, String(v));
-    }
-  });
+    Object.keys(filters).forEach((key) => {
+      const v = filters[key];
+      if (v !== null && v !== undefined && v !== '') {
+        params = params.set(key, String(v));
+      }
+    });
 
-  return this._HttpClient.get(this.apiUrl + '/products', { params });
-}
-
-
-  productDetails(ID:string): Observable<any>{
-    return this._HttpClient.get(this.apiUrl + '/products/'+ID);
+    return this._HttpClient.get(this.apiUrl + '/products', { params });
   }
 
-  getAuthHeaderOptions(): { headers: HttpHeaders } {
-    const token = localStorage.getItem('userToken');
-
-    if (token) {
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-      });
-      return { headers: headers };
-    }
-
-    return { headers: new HttpHeaders() };
+  productDetails(ID: string): Observable<any> {
+    return this._HttpClient.get(this.apiUrl + '/products/' + ID);
   }
 
-  getSubcategories(): Observable<any>{
+  getSubcategories(): Observable<any> {
     return this._HttpClient.get(this.apiUrl + '/products/get-subcategories');
   }
 
-  getReviews(ID:string): Observable<any>{
-    return this._HttpClient.get(this.apiUrl + '/user/get-reviews/'+ID,this.getAuthHeaderOptions());
+  getReviews(ID: string): Observable<any> {
+    return this._HttpClient.get(this.apiUrl + '/user/get-reviews/' + ID);
+  }
+  getTestimonials(): Observable<any> {
+    return this._HttpClient.get(this.apiUrl + '/user/testimonials');
+  }
+  getOffers(): Observable<any> {
+    return this._HttpClient.get(this.apiUrl + '/user/offers');
   }
 }

@@ -9,7 +9,6 @@ import {
   ValidatorFn,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth-service';
-
 import { Router ,ActivatedRoute } from '@angular/router';
 import { NotificationService } from '../../services/notification-service';
 
@@ -82,19 +81,14 @@ export class ResetPassword {
           this.isLoading = false;
           this._NotificationService.show("SUCCESS", data.message, 'success');
           this._Router.navigate(['/login']);
-          } else {
-            this.isLoading = false;
-          }
-        },
+        }},
         error: (e) => {
-          console.log(e)
-          if(e.error.message){
-          this._NotificationService.show("ERROR", e.error.message, 'error');
-
-          }else{
-          this._NotificationService.show(e.name, e.message, 'error');
-
+           if (e.error.message) {
+            this._NotificationService.show('ERROR', e.error.message, 'error');
           }
+            this._NotificationService.show("something wrong", e.name, 'error');
+  
+          console.log(e)
           this.isLoading = false;
         },
       });

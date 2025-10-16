@@ -5,15 +5,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { NotificationService } from './notification-service';
 import { CartModel } from '../models/cart-model';
-import { ProductModel } from '../models/product-model';
+import { WishlistModel } from '../models/wishlist-model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   apiUrl: string = environment.apiUrl;
-
-  wishlist = new BehaviorSubject<any | null>(null);
+  wishlist = new BehaviorSubject<WishlistModel | null>(null);
   cart = new BehaviorSubject<CartModel | null>(null);
 
   constructor(
@@ -22,7 +21,7 @@ export class UserService {
     private _NotificationService: NotificationService
   ) {}
 
-  /**  Centralized Auth Header */
+
   private getAuthHeaderOptions() {
     const token = localStorage.getItem('userToken');
     return {
@@ -30,11 +29,7 @@ export class UserService {
     };
   }
 
-  // Profile
-
-  updateProfile(data: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/user/update-profile`, data, this.getAuthHeaderOptions());
-  }
+ 
 
   //  Wishlist Methods
 
@@ -130,10 +125,53 @@ export class UserService {
     });
   }
 
+  addToCart(prodID: string) {
+    this.addCart(prodID).subscribe({
+      error: (e) => {
+        if (e.error.message) {
+          this._NotificationService.show('ERROR', e.error.message, 'error');
+        } else {
+          this._NotificationService.show(e.name, e.message, 'error');
+        }
+      },
+    });
+  }
+
+  deleteFromCart(prodID: string) {
+    this.deleteCartItem(prodID).subscribe({
+      error: (e) => {
+        if (e.error.message) {
+          this._NotificationService.show('ERROR', e.error.message, 'error');
+        } else {
+          this._NotificationService.show(e.name, e.message, 'error');
+        }
+      },
+    });
+  }
+  //orders
+  getOrders(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/order/`, this.getAuthHeaderOptions());
+  }
+  createOrder(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/order`, data, this.getAuthHeaderOptions());
+  }
+
+  paidOrder(ID: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/order/${ID}/mark-paid`, this.getAuthHeaderOptions());
+  }
+
+  getShippingMethods(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/shipping-method/`, this.getAuthHeaderOptions());
+  }
+
   //  Reviews
 
   createReview(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/user/create-review`, data, this.getAuthHeaderOptions());
+  }
+
+  deleteReview(ID: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/user/delete-review/` + ID, this.getAuthHeaderOptions());
   }
 
   //contact

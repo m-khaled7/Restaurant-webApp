@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl,FormGroup,ReactiveFormsModule, Validators,FormBuilder } from '@angular/forms';
-import { AuthService } from '../../services/auth-service';
-
+import {FormGroup,ReactiveFormsModule, Validators,FormBuilder } from '@angular/forms';
 import { NotificationService } from '../../services/notification-service';
 import { UserService } from '../../services/user-service';
 
@@ -41,12 +39,11 @@ ngOnInit(): void {
         next: (data) => {
           if (data.success) {
             this._NotificationService.show('SUCCESS', data.message, 'success');
-          } else {
             this.isLoading = false;
-          }
+
+          } 
         },
         error: (e) => {
-          
           if (e.error.message) {
             this._NotificationService.show('ERROR', e.error.message, 'error');
           } else {

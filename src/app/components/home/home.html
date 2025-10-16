@@ -1,70 +1,165 @@
-<div class="min-h-screen max-w-full flex flex-col items-start justify-center p-4 lg:pl-32 bg-cover bg-no-repeat" style="background-image: url(home.jpg);">
-    <h3 class="text-primary text-3xl  ">Welcome To</h3>
-    <h1 class="text-black font-bold text-5xl lg:text-7xl" > Guasto Restaurant</h1>
-    <h1 class="text-black font-bold py-4 text-5xl lg:text-7xl" > And Enjoy the <span class="text-primary">Food</span></h1>
-    <p class="py-4 text-lg text-gray-700 max-w-lg text-pretty font-serif">We take you on a unique trip of taste, exploring combinations of inherited ingredients that have been taken to another level, reflecting all that Egypt has best to offer.
- At Guasto, food becomes a common language, bringing together, under one roof, sophisticated recipes that were reimagined to offer a progressive cuisine.</p>
+<div class="min-h-screen max-w-full flex flex-col items-start justify-center p-4 lg:pl-32 bg-cover bg-no-repeat"
+  style="background-image: url(home.jpg)">
+  <h3 class="text-primary text-3xl">Welcome To</h3>
+  <h1 class="text-black font-bold text-5xl lg:text-7xl">Guasto Restaurant</h1>
+  <h1 class="text-black font-bold py-4 text-5xl lg:text-7xl">
+    And Enjoy the <span class="text-primary">Food</span>
+  </h1>
+  <p class="py-4 text-lg text-gray-700 max-w-lg text-pretty font-serif">
+    We take you on a unique trip of taste, exploring combinations of inherited ingredients that have
+    been taken to another level, reflecting all that Egypt has best to offer. At Guasto, food
+    becomes a common language, bringing together, under one roof, sophisticated recipes that were
+    reimagined to offer a progressive cuisine.
+  </p>
+</div>
+<div class=" w-[93%] mx-auto">
+  <h2 class="text-3xl font-light text-center my-12">Our Special Offers</h2>
+
+
+  <swiper-container [slidesPerView]="5" [loop]="true" autoplay="true" [breakpoints]="breakpoints" class="h-96">
+    @for (product of productsList; track $index) {
+    <swiper-slide>
+      <div class="bg-white w-72 rounded-2xl p-4 shadow-md cursor-pointer" (click)="details(product._id)">
+        <img class="w-full h-60 bg-second rounded-lg object-cover" [src]="product.image[0]" alt="" />
+        <div class="py-1">
+          <h1 class="text-lg font-bold py-1">{{ product?.name }}</h1>
+          @if(product?.discountedPrice){
+          <h5 class="text-xl font-bold text-primary py-1">
+            {{ product?.discountedPrice | currency : 'EGP' }}
+            <span class="text-sm text-gray-400 line-through">{{
+              product?.price | currency : 'EGP'
+              }}</span>
+          </h5>
+
+          }@else{
+          <h5 class="text-xl font-bold text-primary py-1">
+            {{ product?.price | currency : 'EGP' }}
+          </h5>
+
+          }
+        </div>
+      </div>
+    </swiper-slide>
+    }
+  </swiper-container>
 
 </div>
 
-<app-carousel/>
+<h2 class="text-3xl font-light text-center my-12">Explore our products</h2>
+<div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-12 w-fit mx-auto">
+  @for (product of productsList; track $index) {
+  <div class="bg-white w-72 rounded-2xl p-4 shadow-md hover:shadow-lg cursor-pointer" (click)="details(product._id)">
+    <img class="w-full h-60 bg-second rounded-lg object-cover" [src]="product.image[0]" alt="" />
+    <div class="py-1">
+      <h1 class="text-lg font-bold py-1">{{ product?.name }}</h1>
+      @if(product?.discountedPrice){
+      <h5 class="text-xl font-bold text-primary py-1">
+        {{ product?.discountedPrice | currency : 'EGP' }}
+        <span class="text-sm text-gray-400 line-through">{{
+          product?.price | currency : 'EGP'
+          }}</span>
+      </h5>
+
+      }@else{
+      <h5 class="text-xl font-bold text-primary py-1">
+        {{ product?.price | currency : 'EGP' }}
+      </h5>
+
+      }
+    </div>
+  </div>
+  }
+</div>
+<div class="text-center py-20">
+  <a routerLink="/menu" class="px-8 py-3 bg-black text-white rounded-full text-lg hover:bg-primary transition">
+    Explore Our Menu
+  </a>
+</div>
+
+
+
 
 <section class="max-w-6xl mx-auto px-6 py-16 bg-white">
   <!-- Title -->
-  <h2 class="text-3xl font-semibold text-center mb-12">
-    Why People Choose us?
-  </h2>
+  <h2 class="text-3xl font-semibold text-center mb-12">Why People Choose us?</h2>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-
     <!-- Left Image -->
     <div>
-      <img src="chooseus.png" 
-           alt="Food" 
-           class="w-full rounded-3xl object-cover">
+      <img src="chooseus.png" alt="Food" class="w-full rounded-3xl object-cover" />
     </div>
 
     <!-- Right Features -->
     <div class="space-y-6">
-
       <!-- Feature Card -->
       <div class="flex items-center bg-white p-6 rounded-2xl shadow-sm">
-        <div class="w-16 h-16 flex items-center justify-center rounded-full bg-yellow-100 text-yellow-500 text-2xl mr-6">
+        <div
+          class="w-16 h-16 flex items-center justify-center rounded-full bg-yellow-100 text-yellow-500 text-2xl mr-6">
           🚚
         </div>
         <div>
           <h3 class="text-xl font-semibold">Convenient and Reliable</h3>
           <p class="text-gray-600 text-sm mt-1">
-            Whether you dine in, take out, or order delivery, our service is convenient,
-            fast, and reliable, making mealtime hassle-free.
+            Whether you dine in, take out, or order delivery, our service is convenient, fast, and
+            reliable, making mealtime hassle-free.
           </p>
         </div>
       </div>
 
       <div class="flex items-center bg-white p-6 rounded-2xl shadow-sm">
-        <div class="w-16 h-16 flex items-center justify-center rounded-full bg-yellow-100 text-yellow-500 text-2xl mr-6">
+        <div
+          class="w-16 h-16 flex items-center justify-center rounded-full bg-yellow-100 text-yellow-500 text-2xl mr-6">
           🍔
         </div>
         <div>
           <h3 class="text-xl font-semibold">Variety of Options</h3>
           <p class="text-gray-600 text-sm mt-1">
-            From hearty meals to light snacks, we offer a wide range of options to suit every taste and craving.
+            From hearty meals to light snacks, we offer a wide range of options to suit every taste
+            and craving.
           </p>
         </div>
       </div>
 
       <div class="flex items-center bg-white p-6 rounded-2xl shadow-sm">
-        <div class="w-16 h-16 flex items-center justify-center rounded-full bg-yellow-100 text-yellow-500 text-2xl mr-6">
+        <div
+          class="w-16 h-16 flex items-center justify-center rounded-full bg-yellow-100 text-yellow-500 text-2xl mr-6">
           🍟
         </div>
         <div>
           <h3 class="text-xl font-semibold">Eat Burger</h3>
           <p class="text-gray-600 text-sm mt-1">
-            Our burgers are grilled to perfection, with juicy patties and flavorful toppings that make every bite a delicious experience.
+            Our burgers are grilled to perfection, with juicy patties and flavorful toppings that
+            make every bite a delicious experience.
           </p>
         </div>
       </div>
-
     </div>
   </div>
 </section>
+@if(testimonials.length != 0 ){
+<div class=" w-[93%] mx-auto my-20 ">
+<h2 class="text-3xl font-light text-center my-12">Testimonials</h2>
+
+<swiper-container [slidesPerView]="5" [loop]="true" autoplay="true" [breakpoints]="breakpointss" class="h-40" >
+  @for (Review of testimonials; track $index) {
+  <swiper-slide>
+    <div class=" flex bg-white  hover:shadow-lg rounded-2xl shadow-lg p-4 w-sm h-32 ">
+      <img class="w-10 h-10 bg-gray-700 rounded-full mr-3 object-cover" [src]="Review.userId.image" alt="">
+      <div>
+        <p class="text-xl my-1">{{Review.userId.name}}</p>
+        <div class="flex gap-1 my-2">
+
+          @for (star of stars; track star; let i = $index) {
+              <i class="fa-star  text-sm" [ngClass]="{
+                  'fa-solid text-primary': i < Review.rating,
+                  'fa-regular': i >= Review.rating
+                }"></i>
+              }
+        </div>
+        <p class="text-md text-gray-700 text-pretty">{{Review.comment}}</p>
+      </div>
+    </div>
+  </swiper-slide>
+  }
+</swiper-container>
+</div>}

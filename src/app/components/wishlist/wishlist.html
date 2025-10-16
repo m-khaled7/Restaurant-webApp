@@ -1,11 +1,11 @@
 <div
-  class="min-h-screen w-screen flex flex-col items-center  pt-20 bg-linear-to-t from-gray-50 to-second"
+  class="min-h-screen  flex flex-col items-center  pt-20 bg-second"
 >
   <h1 class="text-3xl my-6 flex items-center">
     <i class="fa-solid fa-heart mx-1"></i>Wishlist
-    @if (count) { <span class="ml-1">( {{ count }} )</span> }
+    @if (whishlist?.count) { <span class="ml-1">( {{ whishlist?.count }} )</span> }
   </h1>
-
+@if(whishlist?.count){
   <section class="md:col-span-2 bg-white rounded-2xl p-6 shadow-lg w-full max-w-5xl">
 
     <!-- Table header -->
@@ -18,7 +18,7 @@
 
     <!-- Cart items -->
     <ul class="space-y-4">
-      @for (item of whishlist.items; track $index) {
+      @for (item of whishlist?.items; track $index) {
       <li
         class="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 rounded-xl border border-gray-100 cursor-pointer"
         (click)="details(item.product._id)"
@@ -46,7 +46,8 @@
         <!-- Cart -->
         <div class="w-full md:w-1/6 text-center">
           <button
-            class="text-gray-400 hover:text-green-600"
+            class=" hover:text-primary-70 cursor-pointer"
+            [ngClass]="isInCart(item.product._id) ? ' text-primary' : ' text-gray-500'"
             (click)="cart(item.product._id); $event.stopPropagation()"
           >
             <i class="fa-solid fa-cart-shopping"></i>
@@ -56,7 +57,7 @@
         <!-- Action -->
         <div class="w-full md:w-1/6 text-center">
           <button
-            class="text-gray-400 hover:text-red-600"
+            class="text-gray-400 hover:text-red-600 cursor-pointer"
             (click)="deleteItem(item.product._id); $event.stopPropagation()"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -72,5 +73,11 @@
       </li>
       }
     </ul>
-  </section>
+  </section>}@else {
+    <div class="flex flex-col items-center justify-center my-auto">
+        <i class="fa-regular fa-heart text-gray-400 text-9xl"></i>
+        <span class="text-gray-400 text-3xl my-5">Your Wishlist is empty</span>
+
+      </div>
+  }
 </div>

@@ -1,37 +1,18 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { CurrencyPipe ,NgClass} from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Subject, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil, catchError, switchMap } from 'rxjs/operators';
 import { ProductService } from '../../services/product-service';
 import { NotificationService } from '../../services/notification-service';
 import { AuthService } from '../../services/auth-service';
 import { UserService } from '../../services/user-service';
-import { CurrencyPipe } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Subject, of } from 'rxjs';
+import {ProductModel,subcategory}from "../../models/product-model"
+import {WishlistItem}from "../../models/wishlist-model"
+import {cartItem}from "../../models/cart-model"
 
-import {
-  debounceTime,
-  distinctUntilChanged,
-  switchMap,
-  takeUntil,
-  catchError,
-} from 'rxjs/operators';
-import { NgClass } from '@angular/common';
 
-export interface Product {
-  _id: string;
-  name: string;
-  price: number;
-  subcategoryId: string;
-  image: string[]; // array of image URLs or paths
-  sizes: string[]; // array of size options
-  description: string;
-  offerId: string;
-  discountedPrice: number;
-  quantity: number;
-  createdAt: string; // ISO date string
-  updatedAt: string; // ISO date string
-  __v: number;
-}
 
 @Component({
   selector: 'app-products',
@@ -43,11 +24,14 @@ export class Products implements OnInit {
   form: FormGroup;
   private destroy$ = new Subject<void>();
   wishlistIDs: Set<string> = new Set();
-  productsList: Product[] = [];
-  subcategories:any[]=[]
+  cartIDs: Set<string> = new Set();
+  productsList: ProductModel[] = [];
+  subcategories: subcategory[] = [];
   isLogin: boolean = false;
   isFilterOpen: boolean = false;
-
+  currentPage: number = 1;
+  totalPages: number = 1;
+  sizes:string[]=["small","medium","large"]
   constructor(
     private _ProductService: ProductService,
     private _NotificationService: NotificationService,
@@ -62,11 +46,12 @@ export class Products implements OnInit {
       min: [''],
       max: [''],
       subcategoryId: [''],
-      sizes: [[]],
+      sizes:[""],
       page: [1],
       limit: [20],
     });
   }
+
 
   ngOnInit(): void {
     this._AuthService.userData.subscribe({
@@ -79,17 +64,27 @@ export class Products implements OnInit {
       },
     });
 
+    //fill whishlist and Cart product's IDs
     if (this.isLogin) {
       this._UserService.wishlist.subscribe({
         next: (w) => {
-          this.wishlistIDs = new Set(w?.items?.map((item: any) => item.product._id));
+          this.wishlistIDs = new Set(w?.items?.map((item: WishlistItem) => item.product._id));
+        },
+      });
+      this._UserService.cart.subscribe({
+        next: (w) => {
+          this.cartIDs = new Set(w?.items?.map((item: cartItem) => item.product._id));
         },
       });
     }
 
-    this._ProductService.getSubcategories().subscribe((data)=>this.subcategories=data.subcategories)
+    //get subcategories for fillter
+    this._ProductService
+      .getSubcategories()
+      .subscribe((data) => (this.subcategories = data.subcategories));
 
-    // 1) initialize form from current query params (so refresh / shareable URL works)
+    
+    //  initialize form and current page from current query params 
     const qp = this._ActivatedRoute.snapshot.queryParams;
     const initial = {
       search: qp['search'] || '',
@@ -101,8 +96,9 @@ export class Products implements OnInit {
       limit: qp['limit'] ? Number(qp['limit']) : 20,
     };
     this.form.patchValue(initial, { emitEvent: false });
+    this.currentPage = qp['page'] ? Number(qp['page']) : 1;
 
-    // 2) When query params change externally (back/forward), update form and reload
+    // When query params change externally (back/forward), update form and reload
     this._ActivatedRoute.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.form.patchValue(
         {
@@ -116,7 +112,8 @@ export class Products implements OnInit {
         },
         { emitEvent: false }
       );
-      // this.loadProducts(); // load with updated query params
+      this.currentPage = +params['page'] || 1;
+      this.loadProducts(); 
     });
 
     this.form.valueChanges
@@ -124,32 +121,33 @@ export class Products implements OnInit {
         debounceTime(350),
         distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
         takeUntil(this.destroy$),
-        switchMap((val) => {
-          // sync URL
-          this.updateQueryParams(val);
-          // perform API call
-          return of(val);
-        })
+        switchMap((val) => {  
+        this.updateQueryParams(val); 
+        return of(val); })
       )
-      .subscribe(() => this.loadProducts());
+      .subscribe(() => {
+        this.loadProducts()
+      });
 
-    // 4) initial load
+    // load products
     this.loadProducts();
   }
 
+//buils fillter for backend request from form 
   private buildFiltersFromForm() {
     const v = this.form.value;
-    // only include keys that the backend expects (min,max,subcategoryId,size,search,page,limit)
+   
     return {
       search: v.search || undefined,
       min: v.min || undefined,
       max: v.max || undefined,
       subcategoryId: v.subcategoryId || undefined,
-      sizes: v.sizes && v.sizes.length > 0 ? v.sizes : undefined,
+      sizes:v.sizes || undefined,
       page: v.page || undefined,
       limit: v.limit || undefined,
     };
   }
+
 
   loadProducts() {
     const filters = this.buildFiltersFromForm();
@@ -159,12 +157,13 @@ export class Products implements OnInit {
         takeUntil(this.destroy$),
         catchError((err) => {
           console.error(err);
-          return of([] as Product[]);
+          return of([] as ProductModel[]);
         })
       )
       .subscribe({
         next: (data) => {
           this.productsList = data.products;
+          this.totalPages=data.totalPages
         },
         error: (e) => {
           if (e.error.message) {
@@ -176,31 +175,6 @@ export class Products implements OnInit {
       });
   }
 
-  updateQueryParams(val: any) {
-    // remove empty values to keep URL clean
-    const cleaned: any = {};
-    Object.keys(val).forEach((k) => {
-      const v = val[k];
-      if (Array.isArray(v)) {
-        if (v.length > 0) cleaned[k] = v; // keep array
-      } else if (v !== null && v !== undefined && v !== '') {
-        cleaned[k] = v;
-      }
-    });
-  }
-
-  onSizeChange(event: Event, size: string) {
-  const checkbox = event.target as HTMLInputElement;
-  const sizes = this.form.value.sizes || [];
-
-  if (checkbox.checked) {
-    // add size if not exists
-    this.form.patchValue({ sizes: [...sizes, size] });
-  } else {
-    // remove size
-    this.form.patchValue({ sizes: sizes.filter((s: string) => s !== size) });
-  }
-}
 
   resetFilters() {
     this.form.patchValue(
@@ -213,9 +187,9 @@ export class Products implements OnInit {
         page: 1,
       },
       { emitEvent: false }
-    ); // prevent triggers
+    ); 
 
-    // Update URL query params
+    // reset URL query params
     this._Router.navigate([], {
       relativeTo: this._ActivatedRoute,
       queryParams: {},
@@ -224,6 +198,45 @@ export class Products implements OnInit {
     // Load products without filters
     this.loadProducts();
   }
+
+  
+updateQueryParams(val: any) {
+  const cleaned: any = {};
+  Object.keys(val).forEach((k) => {
+    const v = val[k];
+    if (v !== null && v !== undefined && v !== '') {
+      cleaned[k] = v;
+    }
+  });
+
+  this._Router.navigate([], {
+    relativeTo: this._ActivatedRoute,
+    queryParams: cleaned,
+    queryParamsHandling: 'merge',
+  });
+}
+
+
+goToPage(page: number) {
+  if (page < 1 || page > this.totalPages) return;
+
+  this.currentPage = page;
+
+  // Update query params so URL stays in sync
+  this._Router.navigate([], {
+    relativeTo: this._ActivatedRoute,
+    queryParams: { page: this.currentPage },
+    queryParamsHandling: 'merge',
+  });
+
+  // Reload products
+  this.loadProducts();
+}
+
+get pagesArray(): number[] {
+  return Array(this.totalPages).fill(0).map((x, i) => i + 1);
+}
+
 
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
@@ -235,6 +248,10 @@ export class Products implements OnInit {
 
   isInWishlist(productId: string): boolean {
     return this.wishlistIDs.has(productId);
+  }
+
+  isInCart(productId: string): boolean {
+    return this.cartIDs.has(productId);
   }
 
   wishlist(prodID: string) {
@@ -251,18 +268,11 @@ export class Products implements OnInit {
 
   cart(prodID: string) {
     if (this.isLogin) {
-      this._UserService.addCart(prodID).subscribe({
-        next: (data) => {
-          this._NotificationService.show('SUCCESS', data.message, 'success');
-        },
-        error: (e) => {
-          if (e.error.message) {
-            this._NotificationService.show('ERROR', e.error.message, 'error');
-          } else {
-            this._NotificationService.show(e.name, e.message, 'error');
-          }
-        },
-      });
+      if (this.isInCart(prodID)) {
+        this._UserService.deleteFromCart(prodID);
+      } else {
+        this._UserService.addToCart(prodID);
+      }
     } else {
       this._NotificationService.show('ERROR', 'please Login frist', 'error');
     }

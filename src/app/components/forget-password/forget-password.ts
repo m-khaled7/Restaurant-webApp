@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth-service';
 import { NotificationService } from '../../services/notification-service';
 
 @Component({
   selector: 'app-forget-password',
-  imports: [ ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './forget-password.html',
   styleUrl: './forget-password.css',
 })
@@ -23,23 +22,20 @@ export class ForgetPassword {
   get email() {
     return this.forgetPasswordForm.get('email');
   }
-   submit(forgetPasswordForm: FormGroup) {
+  submit(forgetPasswordForm: FormGroup) {
     this.isLoading = true;
     if (forgetPasswordForm.valid) {
       this._AuthService.forgetPassword(forgetPasswordForm.value).subscribe({
         next: (data) => {
-          if (data.success) {
-            this.isLoading = false;
-            this._NotificationService.show('success', data.message, 'success');
-          } else {
-            this.isLoading = false;
-          }
+          this.isLoading = false;
+          this._NotificationService.show('success', data.message, 'success');
         },
         error: (e) => {
           if (e.error.message) {
             this._NotificationService.show('ERROR', e.error.message, 'error');
           } else {
-            this._NotificationService.show(e.name, e.message, 'error');
+            this._NotificationService.show('something wrong', e.name, 'error');
+            console.log(e);
           }
           this.isLoading = false;
         },

@@ -2,17 +2,20 @@ import { Component, OnInit, } from '@angular/core';
 import {RouterLink,RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 import { UserService } from '../../services/user-service';
+import { NgClass } from '@angular/common';
 
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive,NgClass],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css'
 })
 export class Navbar implements OnInit {
   constructor(private _AuthService:AuthService,private _UserService:UserService){}
   isLogin:boolean=false
+  isOpen: boolean = false;
+
   user:any={}
 
 
@@ -24,8 +27,6 @@ export class Navbar implements OnInit {
           this.user=JSON.parse(String(localStorage.getItem('user')))
           this._UserService.loadWishlist()
           this._UserService.loadCart()
-
-
         }else{
           this.isLogin=false
           this.user={}

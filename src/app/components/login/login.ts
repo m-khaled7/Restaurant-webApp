@@ -23,9 +23,7 @@ export class Login {
     email: new FormControl(null, [Validators.email, Validators.required]),
     password: new FormControl(null, [
       Validators.required,
-      Validators.pattern(
-          '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'
-        ),
+      Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$'),
     ]),
   });
 
@@ -44,27 +42,24 @@ export class Login {
     if (loginForm.valid) {
       this._AuthService.login(loginForm.value).subscribe({
         next: (data) => {
-          if (data.success) {
-            localStorage.setItem('userToken', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-            this._AuthService.saveUserData();
-            this.isLoading = false;
-            this._Router.navigate(['/home']);
-          } else {
-            this.isLoading = false;
-          }
+          localStorage.setItem('userToken', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          this._AuthService.saveUserData();
+          this.isLoading = false;
+          this._Router.navigate(['/home']);
         },
         error: (e) => {
-          if (e.error.message === 'Please Verify Your Email') {
-            this._NotificationService.show('ERROR', e.error.message, 'error');
+          if (e.error.message === 'We sent you a verification code, Please Verify Your Email') {
+            this._NotificationService.show('unverified', e.error.message, 'warning');
             localStorage.setItem('verifyToken', e.error.token);
             this.isLoading = false;
             this._Router.navigate(['/verify-email']);
-          }
-          if (e.error.message) {
+            console.log(e);
+          } else if (e.error.message) {
             this._NotificationService.show('ERROR', e.error.message, 'error');
           } else {
             this._NotificationService.show(e.name, e.message, 'error');
+            console.log(e);
           }
           this.isLoading = false;
         },

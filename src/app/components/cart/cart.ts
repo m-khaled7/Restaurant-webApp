@@ -6,17 +6,19 @@ import { Router } from '@angular/router';
 import { CartModel } from '../../models/cart-model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-cart',
-  imports: [CurrencyPipe, DatePipe],
+  imports: [CurrencyPipe, DatePipe, ReactiveFormsModule],
   templateUrl: './cart.html',
   styleUrl: './cart.css',
 })
 export class Cart implements OnInit, OnDestroy {
-
   cart: CartModel | null = null;
   date = new Date();
+  shippingMethods:any=[]
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -25,13 +27,32 @@ export class Cart implements OnInit, OnDestroy {
     private _Router: Router
   ) {}
 
+  orderForm = new FormGroup({
+    shippingAddress: new FormControl(null, [Validators.required]),
+    paymentMethod: new FormControl(null, [Validators.required]),
+    shippingMethodId: new FormControl(null, [Validators.required]),
+  });
+
+  get shippingAddress() {
+    return this.orderForm.get('shippingAddress');
+  }
+
+  get paymentMethod() {
+    return this.orderForm.get('paymentMethod');
+  }
+
+  get shippingMethodId() {
+    return this.orderForm.get('shippingMethodId');
+  }
+
   ngOnInit(): void {
-    this._UserService.loadCart();
-    this._UserService.cart
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((cart:CartModel|null) => {
-        this.cart = cart;
-      });
+    this._UserService.cart.pipe(takeUntil(this.destroy$)).subscribe((cart: CartModel | null) => {
+      this.cart = cart;
+    });
+    this._UserService.getShippingMethods().subscribe({
+      next:(data)=>{this.shippingMethods=data},
+      error:(e)=>{console.log(e)}
+    })
   }
 
   ngOnDestroy(): void {
@@ -40,7 +61,8 @@ export class Cart implements OnInit, OnDestroy {
   }
 
   removeItem(id: string): void {
-    this._UserService.deleteCartItem(id)
+    this._UserService
+      .deleteCartItem(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
@@ -64,7 +86,8 @@ export class Cart implements OnInit, OnDestroy {
   }
 
   private updateQuantity(id: string, newQuantity: number): void {
-    this._UserService.updateQuantity(id, newQuantity)
+    this._UserService
+      .updateQuantity(id, newQuantity)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => this._UserService.loadCart(),
@@ -75,7 +98,8 @@ export class Cart implements OnInit, OnDestroy {
   clearCart(): void {
     if (!this.cart?.items?.length) return;
 
-    this._UserService.clearCart()
+    this._UserService
+      .clearCart()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
@@ -88,6 +112,10 @@ export class Cart implements OnInit, OnDestroy {
 
   details(id: string): void {
     this._Router.navigate(['/menu', id]);
+  }
+
+  order(){
+    this._Router.navigate(['/order']);
   }
 
   private handleError(e: any): void {

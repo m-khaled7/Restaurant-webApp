@@ -1,16 +1,24 @@
 export interface ProductModel {
-    _id: string;
+  _id: string;
   name: string;
   price: number;
   subcategoryId: string;
-  image: string[]; 
-  sizes: string[]; 
+  image: string[];
+  sizes: string[];
   description: string;
   offerId: string;
   discountedPrice: number;
   quantity: number;
-  createdAt: string; 
-  updatedAt: string; 
-  __v: number;  
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
 
+export interface subcategory {
+  _id: string;
+  name:string;
+  categoryId: string;
+  createdAt:string;
+  updatedAt: string;
+  __v: number;
+}

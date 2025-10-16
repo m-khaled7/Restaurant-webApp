@@ -73,7 +73,6 @@ export class Signup {
       const group = control as FormGroup;
       const password = group.get('password')?.value;
       const confirm = group.get('password_confirmation')?.value;
-
       return password === confirm ? null : { passwordsMismatch: true };
     };
   }
@@ -83,23 +82,18 @@ export class Signup {
     if (registerForm.valid) {
       this._AuthService.signup(registerForm.value).subscribe({
         next: (data) => {
-          if (data.success) {
             localStorage.setItem('verifyToken', data.token);
             this.isLoading = false;
-            this._NotificationService.show('ERROR', data.message, 'error');
-
+            this._NotificationService.show('Verify', data.message, 'info');
             this._Router.navigate(['/verify-email']);
-          } else {
-            this.isLoading = false;
-          }
         },
         error: (e) => {
           console.log(e);
-          if (e.error.message) {
+           if (e.error.message) {
             this._NotificationService.show('ERROR', e.error.message, 'error');
-          } else {
-            this._NotificationService.show(e.name, e.message, 'error');
           }
+            this._NotificationService.show("something wrong", e.name, 'error');
+          console.log(e)
           this.isLoading = false;
         },
       });

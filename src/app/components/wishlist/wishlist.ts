@@ -1,71 +1,55 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user-service';
-import { NotificationService } from '../../services/notification-service';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
-import { Observable, BehaviorSubject } from 'rxjs';
+import {WishlistModel}from "../../models/wishlist-model"
+import {cartItem}from "../../models/cart-model"
 
 
 
 @Component({
   selector: 'app-wishlist',
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe,NgClass],
   templateUrl: './wishlist.html',
   styleUrl: './wishlist.css',
 })
 export class Wishlist implements OnInit {
-  whishlist: any = [];
-  count:number=0
+  whishlist: WishlistModel | null=null
+  cartIDs: Set<string> = new Set();
   constructor(
     private _UserService: UserService,
-    private _NotificationService: NotificationService,
-    private _Router:Router
+    private _Router: Router
   ) {}
   ngOnInit(): void {
-    this._UserService.loadWishlist()
     this._UserService.wishlist.subscribe({
-      next:()=>{
-        this.whishlist=this._UserService.wishlist.getValue()
-      }
-    })
-  }
-
-
-
-  deleteItem(ID: string) {
-    this._UserService.deleteWishlistItem(ID).subscribe({
       next: (data) => {
-        this._NotificationService.show('success', data.message, 'success');
-        this._UserService.loadWishlist()
-
+        this.whishlist = data;
       },
-      error: (e) => {
-        if (e.error.message) {
-          this._NotificationService.show('ERROR', e.error.message, 'error');
-        } else {
-          this._NotificationService.show(e.name, e.message, 'error');
-        }
+    });
+    this._UserService.cart.subscribe({
+      next: (w) => {
+        this.cartIDs = new Set(w?.items?.map((item: cartItem) => item.product._id));
       },
     });
   }
 
-  cart(prodID: string) {
-    
-      this._UserService.addCart(prodID).subscribe({
-        next: (data) => {
-          this._NotificationService.show('SUCCESS', data.message, 'success');
-        },
-        error: (e) => {
-          if (e.error.message) {
-            this._NotificationService.show('ERROR', e.error.message, 'error');
-          } else {
-            this._NotificationService.show(e.name, e.message, 'error');
-          }
-        },
-      });
-
+  deleteItem(ID: string) {
+    this._UserService.deleteFromWishlist(ID)
   }
-    details(ID:string) {
-    this._Router.navigate(["/menu/"+ID])
+
+  isInCart(productId: string): boolean {
+    return this.cartIDs.has(productId);
+  }
+
+  cart(prodID: string) {
+    if (this.isInCart(prodID)) {
+      this._UserService.deleteFromCart(prodID);
+    } else {
+      this._UserService.addToCart(prodID);
+    }
+  }
+
+  details(ID: string) {
+    this._Router.navigate(['/menu/' + ID]);
   }
 }

@@ -1,7 +1,7 @@
 <div class="flex my-10 rounded-3xl ">
-  <div class="w-10 h-10 bg-gray-700 rounded-full mr-3"></div>
+  <img class="w-10 h-10 bg-gray-700 rounded-full mr-3 object-cover" [src]="user.image" alt="">
   <div>
-    <h6 class="text-lg">Mohamed khaled</h6>
+    <h6 class="text-lg">{{user?.name}}</h6>
     <app-star-rating [(fixedRating)]="rating"></app-star-rating>
     <div>
       <input

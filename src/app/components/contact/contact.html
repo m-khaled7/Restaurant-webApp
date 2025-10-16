@@ -1,85 +1,103 @@
 <main class="min-h-screen flex items-center justify-center   p-6">
-    <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-8">
+  <div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-      
-      <section class="bg-gradient-to-b from-white to-gray-50 p-8 rounded-2xl shadow-md border border-gray-100">
-        <div class="flex items-center gap-4 mb-6">
-          <div class="w-12 h-12 rounded-lg bg-primary flex items-center justify-center text-white text-lg font-bold">C</div>
+
+    <section class="bg-gradient-to-b from-white to-gray-50 p-8 rounded-2xl shadow-md border border-gray-100">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-12 h-12 rounded-lg bg-primary flex items-center justify-center text-white text-lg font-bold">C
+        </div>
+        <div>
+          <h1 class="text-2xl font-extrabold">Get in touch</h1>
+          <p class="text-sm text-gray-500 mt-1">Have a question, suggestion, or want a custom quote? Send us a message —
+            we reply within 24 hours.</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div class="flex items-start gap-3">
+          <svg class="w-6 h-6 text-indigo-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M16 3v4M8 3v4m8 4H8" />
+          </svg>
           <div>
-            <h1 class="text-2xl font-extrabold">Get in touch</h1>
-            <p class="text-sm text-gray-500 mt-1">Have a question, suggestion, or want a custom quote? Send us a message — we reply within 24 hours.</p>
+            <div class="text-sm font-medium">inquery</div>
+            <div class="text-sm text-gray-500">inquires</div>
           </div>
         </div>
 
-        <div class="space-y-4">
-          <div class="flex items-start gap-3">
-            <svg class="w-6 h-6 text-indigo-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M16 3v4M8 3v4m8 4H8" /></svg>
-            <div>
-              <div class="text-sm font-medium">inquery</div>
-              <div class="text-sm text-gray-500">inquires</div>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-3">
-            <svg class="w-6 h-6 text-indigo-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2 8.5A5.5 5.5 0 017.5 3h9A5.5 5.5 0 0122 8.5v7A5.5 5.5 0 0116.5 21h-9A5.5 5.5 0 012 15.5v-7z" /></svg>
-            <div>
-              <div class="text-sm font-medium">Problem</div>
-              <div class="text-sm text-gray-500">let us know to help you</div>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-3">
-            <svg class="w-6 h-6 text-indigo-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h6l2 7h8" /></svg>
-            <div>
-              <div class="text-sm font-medium">suggestions</div>
-              <div class="text-sm text-gray-500">write your suggestions</div>
-            </div>
-          </div>
-
-            <div class="mt-6">
-                <h3 class="text-sm font-semibold text-gray-700">Business hours</h3>
-                <p class="text-sm text-gray-500 mt-1">Mon – Fri: 9:00 AM — 6:00 PM</p>
-            </div>
-
-          
-        </div>
-      </section>
-
-      <!-- Right: Contact Form -->
-      <section class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-        <form  class="space-y-5" [formGroup]="form" (ngSubmit)="submit(form)">
-         
-
+        <div class="flex items-start gap-3">
+          <svg class="w-6 h-6 text-indigo-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M2 8.5A5.5 5.5 0 017.5 3h9A5.5 5.5 0 0122 8.5v7A5.5 5.5 0 0116.5 21h-9A5.5 5.5 0 012 15.5v-7z" />
+          </svg>
           <div>
-            <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
-            <textarea formControlName="message" id="message" name="message" required class="auto-expand mt-2 w-full  px-4 py-4 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary outline-none placeholder:text-gray-400"
-              placeholder="Write your message..." aria-label="Message" rows="10"></textarea>
-            <p class="mt-2 text-xs text-gray-400">Be clear and concise — we usually reply within 24 hours.</p>
-
-           @if(message?.dirty||message?.touched ){
-            @if (message?.hasError('required')) {
-            <p class="text-sm text-red-600 mt-1"><i class="fa-solid fa-circle-exclamation"></i>  message is required.</p>
-           }}
-
+            <div class="text-sm font-medium">Problem</div>
+            <div class="text-sm text-gray-500">let us know to help you</div>
           </div>
+        </div>
 
-          <div class="flex items-center justify-between gap-4">
-            
-
-            <div class="flex items-center gap-3">
-              <button id="submitBtn" type="submit"
-                class="inline-flex items-center gap-2 px-5 py-3 cursor-pointer bg-primary text-white rounded-xl font-medium hover:bg-primary-70 focus:outline-none focus:ring-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2z" /></svg>
-                Send message
-              </button>
-              <button id="clearBtn" type="button" class="px-4 py-3 rounded-xl border border-gray-200 text-sm hover:bg-gray-50 cursor-pointer" (click)="clear()">Clear</button>
-            </div>
+        <div class="flex items-start gap-3">
+          <svg class="w-6 h-6 text-indigo-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5h6l2 7h8" />
+          </svg>
+          <div>
+            <div class="text-sm font-medium">suggestions</div>
+            <div class="text-sm text-gray-500">write your suggestions</div>
           </div>
-        </form>
+        </div>
 
-        <!-- Success toast -->
-      
-      </section>
+        <div class="mt-6">
+          <h3 class="text-sm font-semibold text-gray-700">Business hours</h3>
+          <p class="text-sm text-gray-500 mt-1">Mon – Fri: 9:00 AM — 6:00 PM</p>
+        </div>
 
-    </div>
-  </main>
+
+      </div>
+    </section>
+
+    <!-- Right: Contact Form -->
+    <section class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+      <form class="space-y-5" [formGroup]="form" (ngSubmit)="submit(form)">
+
+
+        <div>
+          <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+          <textarea formControlName="message" id="message" name="message" required
+            class="auto-expand mt-2 w-full  px-4 py-4 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary outline-none placeholder:text-gray-400"
+            placeholder="Write your message..." aria-label="Message" rows="10"></textarea>
+          <p class="mt-2 text-xs text-gray-400">Be clear and concise — we usually reply within 24 hours.</p>
+
+          @if(message?.dirty||message?.touched ){
+          @if (message?.hasError('required')) {
+          <p class="text-sm text-red-600 mt-1"><i class="fa-solid fa-circle-exclamation"></i> message is required.</p>
+          }}
+
+        </div>
+
+        <div class="flex items-center justify-between gap-4">
+
+
+          <div class="flex items-center gap-3">
+            <button id="submitBtn" type="submit"
+              class="inline-flex items-center gap-2 px-5 py-3 cursor-pointer bg-primary text-white rounded-xl font-medium hover:bg-primary-70 focus:outline-none focus:ring-2">
+              @if(isLoading){
+              <i class="fas fa-spinner fa-spin"></i>
+              }@else{
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2z" />
+              </svg>
+              Send message}
+            </button>
+            <button id="clearBtn" type="button"
+              class="px-4 py-3 rounded-xl border border-gray-200 text-sm hover:bg-gray-50 cursor-pointer"
+              (click)="clear()">Clear</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Success toast -->
+
+    </section>
+
+  </div>
+</main>

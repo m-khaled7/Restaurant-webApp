@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, input } from '@angular/core';
 import { StarRating } from './star-rating/star-rating';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from '../../services/notification-service';
@@ -17,6 +17,7 @@ export class Review {
  
 
   @Output() addComment = new EventEmitter<{ rating: number; comment: string }>();
+  @Input() user:any ={}
 
   
 

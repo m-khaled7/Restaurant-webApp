@@ -24,16 +24,29 @@
           <i class="fa-solid fa-circle-exclamation"></i>code must be 4 numbers.
         </p>
         }
+        @if (code?.hasError('maxlength')) {
+        <p class="text-sm text-red-600 mt-1">
+          <i class="fa-solid fa-circle-exclamation"></i>code must be 4 numbers.
+        </p>
+        }
       </div>
       }
+      <button class="text-primary hover:text-primary-70 cursor-pointer" (click)="resendCode($event)">Resend @if(isLoadingResend){
+        <i class="fas fa-spinner fa-spin"></i>
+        }</button>
+
     </div>
     <button
       type="submit"
-      class="px-12 py-2 mb-6 bg-primary rounded-lg text-xl cursor-pointer hover:bg-primary-70"
+      class="px-12 py-2 mb-6 bg-primary text-white rounded-lg text-xl cursor-pointer hover:bg-primary-70"
     >
-      Send
+    @if(isLoading){
+        <i class="fas fa-spinner fa-spin"></i>
+        }@else{
+        <span>Send</span>
+        }
+      
     </button>
   </form>
-      <button class="text-primary" (click)="resendCode()">Resend</button>
 
 </div>

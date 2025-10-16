@@ -1,41 +1,6 @@
 <div class="flex flex-col justify-center items-center h-screen">
   <img class="h-[300px] w-[300px] object-cover rounded-full" [src]="user.image" alt="" />
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col w-96">
-    <label
-      class="flex flex-col items-center justify-center w-full h-30 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition"
-    >
-      <div class="flex flex-col items-center pt-5 pb-6">
-        <svg class="w-10 h-10 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6H16a4 4 0 010 8h-1M12 12v9m0 0l-3-3m3 3l3-3"
-          ></path>
-        </svg>
-        <p class="text-sm text-gray-500">
-          <span class="font-semibold">Click to upload</span> or drag and drop
-        </p>
-        <p class="text-xs text-gray-400">PNG, JPG, PDF (MAX. 10MB)</p>
-      <input type="file" class="" (change)="onFileSelected($event)" />
-
-      </div>
-    </label>
-    <input
-      type="text"
-      formControlName="name"
-      class="w-full px-4 py-2 mt-3 border rounded-lg outline-none border-gray-300 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-      [ngClass]="{
-        'border-red-500 focus:ring-red-500 focus:border-red-500':
-          form.get('name')?.invalid && form.get('name')?.touched
-      }"
-    />
-    @if (form.get('name')?.invalid && form.get('name')?.touched) {
-    <p class="text-sm text-red-600 mt-1">Name is required</p>
-    }
-
-    <button class="bg-primary py-2 my-2 text-white rounded-lg hover:bg-primary-70 cursor-pointer disabled:bg-gray-400" [disabled]="!form.get('name')?.dirty " type="submit">Update profile</button>
-  </form>
+  <h1 class="text-2xl mb-20 text-center"> {{user.name}} </h1>
     <button class="bg-red-600 py-2 my-2 text-white rounded-lg hover:bg-red-700 w-96 cursor-pointer" (click)="signout()">LogOut</button>
 
 </div>
