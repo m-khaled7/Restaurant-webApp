@@ -52,7 +52,7 @@ export class Products implements OnInit {
       subcategoryId: [''],
       sizes: [''],
       page: [1],
-      limit: [20],
+      limit: [10],
     });
   }
 
@@ -95,7 +95,7 @@ export class Products implements OnInit {
       subcategoryId: qp['subcategoryId'] || '',
       sizes: Array.isArray(qp['sizes']) ? qp['sizes'] : qp['sizes'] ? [qp['sizes']] : [],
       page: qp['page'] ? Number(qp['page']) : 1,
-      limit: qp['limit'] ? Number(qp['limit']) : 20,
+      limit: qp['limit'] ? Number(qp['limit']) : 10,
     };
     this.form.patchValue(initial, { emitEvent: false });
     this.currentPage = qp['page'] ? Number(qp['page']) : 1;
@@ -110,7 +110,7 @@ export class Products implements OnInit {
           subcategoryId: params['subcategoryId'] || '',
           sizes: params['sizes'] || '',
           page: params['page'] ? Number(params['page']) : 1,
-          limit: params['limit'] ? Number(params['limit']) : 20,
+          limit: params['limit'] ? Number(params['limit']) : 10,
         },
         { emitEvent: false }
       );

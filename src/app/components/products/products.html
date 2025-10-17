@@ -15,7 +15,7 @@
 
         <form [formGroup]="form" (submit)="$event.preventDefault()" class="mt-4 lg:mt-0">
             <div class="mb-6 border-b border-gray-200 pb-4">
-                <h5 class="text-lg font-bold mb-3">Category</h5>
+                <h5 class="text-lg font-bold mb-3">Subcategory</h5>
                 <div class="space-y-1 text-sm">
                     <label class="flex items-center gap-2 mb-1">
                         <input type="radio" value="" formControlName="subcategoryId" />
@@ -86,7 +86,7 @@
             </form>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 mx-auto w-fit">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-6 mx-auto w-fit">
             @for (product of productsList; track $index) {
 
             <div class="bg-white w-[350px] p-2 rounded-xl shadow overflow-hidden cursor-pointer transform hover:shadow-lg transition duration-300"
@@ -145,7 +145,7 @@
 
             <div class="flex items-center gap-2 justify-center">
                 @for (page of pagesArray; track $index) {
-                <button (click)="goToPage(page)" class="px-3 py-2 rounded" [class.bg-primary]="page === currentPage"
+                <button (click)="goToPage(page)" class="px-3 py-2 rounded cursor-pointer " [class.bg-primary]="page === currentPage"
                     [class.text-white]="page === currentPage" [class.bg-gray-200]="page !== currentPage">
                     {{ page }}
                 </button>

@@ -1,4 +1,4 @@
-<div class="min-h-screen max-w-full flex flex-col items-start justify-center p-4 lg:pl-32 bg-cover bg-no-repeat"
+<div class="min-h-screen mt-4 max-w-full flex flex-col items-start justify-center p-4 lg:pl-32 bg-cover bg-no-repeat"
   style="background-image: url(home.jpg)">
   <h3 class="text-primary text-3xl">Welcome To</h3>
   <h1 class="text-black font-bold text-5xl lg:text-7xl">Guasto Restaurant</h1>
@@ -11,6 +11,11 @@
     becomes a common language, bringing together, under one roof, sophisticated recipes that were
     reimagined to offer a progressive cuisine.
   </p>
+  <div class="text-center mt-4">
+    <a routerLink="/menu" class="px-8 py-3 bg-black text-white rounded-full text-lg hover:bg-primary transition">
+      Explore Our Menu
+    </a>
+  </div>
 </div>
 <div class=" w-[93%] mx-auto">
   <h2 class="text-3xl font-light text-center my-12">Our Special Offers</h2>
@@ -23,7 +28,7 @@
         <img class="w-full h-60 bg-second rounded-lg object-cover" [src]="product.image[0]" alt="" />
         <div class="absolute top-5 left-5">
           <img class="h-15 w-15" src="offer.png" alt="">
-          <span class="absolute top-4 left-3 text-xl text-white" > {{product.offerId.discountPercentage}}%  </span>
+          <span class="absolute top-4 left-3 text-xl text-white"> {{product.offerId.discountPercentage}}% </span>
         </div>
         <div class="py-1">
           <h1 class="text-lg font-bold py-1">{{ product?.name }}</h1>
@@ -42,7 +47,8 @@
 
           }
         </div>
-        <div class="font-bold text-lg"> Ends At <span class="text-md  text-red-500" >{{product.offerId.endDate | date}} </span></div>
+        <div class="font-bold text-lg"> Ends At <span class="text-md  text-red-500">{{product.offerId.endDate | date}}
+          </span></div>
       </div>
     </swiper-slide>
     }
@@ -51,7 +57,7 @@
 </div>
 
 <h2 class="text-3xl font-light text-center my-12">Explore our products</h2>
-<div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-12 w-fit mx-auto">
+<div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12 w-fit mx-auto">
   @for (product of productsList; track $index) {
   <div class="bg-white w-72 rounded-2xl p-4 shadow-md hover:shadow-lg cursor-pointer" (click)="details(product._id)">
     <img class="w-full h-60 bg-second rounded-lg object-cover" [src]="product.image[0]" alt="" />
@@ -143,29 +149,29 @@
 </section>
 @if(testimonials.length != 0 ){
 <div class=" w-[93%] mx-auto my-20 ">
-<h2 class="text-3xl font-light text-center my-12">Testimonials</h2>
+  <h2 class="text-3xl font-light text-center my-12">Testimonials</h2>
 
-<swiper-container [slidesPerView]="5" [loop]="true" autoplay="true" [breakpoints]="breakpointss" class="h-40" >
-  @for (Review of testimonials; track $index) {
-  <swiper-slide>
-    <div class=" flex bg-white  hover:shadow-lg rounded-2xl shadow-lg p-4 w-sm h-32 ">
-      <img class="w-24 h-24 bg-gray-700 rounded-xl mr-3 object-cover" [src]="Review.productId.image[0]" alt="">
-      <div>
-        <p class="text-xl mb-1">{{Review.productId.name}}</p>
-        <p class="text-md my-1">{{Review.userId.name}}</p>
-        <div class="flex gap-1 my-1">
+  <swiper-container [slidesPerView]="5" [loop]="true" autoplay="true" [breakpoints]="breakpointss" class="h-40">
+    @for (Review of testimonials; track $index) {
+    <swiper-slide>
+      <div class=" flex bg-white  hover:shadow-lg rounded-2xl shadow-lg p-4 w-sm h-32 ">
+        <img class="w-24 h-24 bg-gray-700 rounded-xl mr-3 object-cover" [src]="Review.productId.image[0]" alt="">
+        <div>
+          <p class="text-xl mb-1">{{Review.productId.name}}</p>
+          <p class="text-md my-1">{{Review.userId.name}}</p>
+          <div class="flex gap-1 my-1">
 
-          @for (star of stars; track star; let i = $index) {
-              <i class="fa-star  text-sm" [ngClass]="{
+            @for (star of stars; track star; let i = $index) {
+            <i class="fa-star  text-sm" [ngClass]="{
                   'fa-solid text-primary': i < Review.rating,
                   'fa-regular': i >= Review.rating
                 }"></i>
-              }
+            }
+          </div>
+          <p class="text-md text-gray-700 text-pretty">{{Review.comment}}</p>
         </div>
-        <p class="text-md text-gray-700 text-pretty">{{Review.comment}}</p>
       </div>
-    </div>
-  </swiper-slide>
-  }
-</swiper-container>
+    </swiper-slide>
+    }
+  </swiper-container>
 </div>}
