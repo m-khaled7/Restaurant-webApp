@@ -17,12 +17,17 @@ import { verifyCodeGuard } from './guards/verfiy-code-guard-guard';
 import { loggedinGuard } from './guards/loggedin-guard';
 import { NotFound } from './components/not-found/not-found';
 import { Order } from './components/order/order';
+import { SuccessOrder } from './components/success-order/success-order';
+import { FaildPayment } from './components/faild-payment/faild-payment';
+import { OrderDetails } from './components/order-details/order-details';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: Home, title: 'Guasto Restaurant' },
-  { path: 'contacts', canActivate: [authGuard], component: Contact, title: 'Contact US' },
+  { path: 'menu', component: Products, title: 'Menu' },
+  { path: 'menu/:id', component: ProductDetails, title: 'product' },
   { path: 'about', component: About, title: 'About Us' },
+  { path: 'contacts', canActivate: [authGuard], component: Contact, title: 'Contact US' },
   { path: 'login', canActivate: [loggedinGuard], component: Login, title: 'Login' },
   { path: 'signup', canActivate: [loggedinGuard], component: Signup, title: 'Sign Up' },
   {
@@ -31,10 +36,6 @@ export const routes: Routes = [
     component: VerifyCode,
     title: 'verify Email',
   },
-  { path: 'wishlist', canActivate: [authGuard], component: Wishlist, title: 'wishlist' },
-  { path: 'cart', canActivate: [authGuard], component: Cart, title: 'My Cart' },
-  { path: 'menu', component: Products, title: 'Menu' },
-  { path: 'menu/:id', component: ProductDetails, title: 'product' },
   {
     path: 'forget-password',
     canActivate: [loggedinGuard],
@@ -47,7 +48,23 @@ export const routes: Routes = [
     component: ResetPassword,
     title: 'Reset Password',
   },
-  { path: 'profile', component: Profile, title: 'profile' },
-  { path: 'order',canActivate: [authGuard], component: Order, title: 'order checkout' },
+
+  { path: 'profile',canActivate: [authGuard], component: Profile, title: 'profile' },
+  { path: 'wishlist', canActivate: [authGuard], component: Wishlist, title: 'wishlist' },
+  { path: 'cart', canActivate: [authGuard], component: Cart, title: 'My Cart' },
+  { path: 'order', canActivate: [authGuard], component: Order, title: 'order checkout' },
+  { path: 'order/:id', canActivate: [authGuard], component: OrderDetails, title: 'Order Details' },
+  {
+    path: 'payment-success',
+    canActivate: [authGuard],
+    component: SuccessOrder,
+    title: 'order checkout',
+  },
+  {
+    path: 'payment-failed',
+    canActivate: [authGuard],
+    component: FaildPayment,
+    title: 'Payment failed',
+  },
   { path: '**', component: NotFound, title: 'Not Found' },
 ];

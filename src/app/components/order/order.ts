@@ -1,22 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../services/user-service';
-import { Router } from '@angular/router';
+import { Router ,RouterLink} from '@angular/router';
+import {ShippingMethod} from "../../models/order"
+import { NotificationService } from '../../services/notification-service';
+
+import { CartModel } from '../../models/cart-model';
 
 
 
 @Component({
   selector: 'app-order',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,RouterLink],
   templateUrl: './order.html',
   styleUrl: './order.css'
 })
 export class Order implements OnInit {
-  shippingMethods:any=[]
+  cart: CartModel | null = null;
+  shippingMethods:ShippingMethod[]=[]
+  paymentSuccess:boolean=false
+  currentOrderId:string=""
 
-  constructor(private _UserService: UserService,private _Router:Router){
+  constructor(private _UserService: UserService,private _Router:Router,private _NotificationService:NotificationService){
   }
   ngOnInit(): void {
+    this._UserService.cart.subscribe((cart: CartModel | null) => {
+          this.cart = cart;
+        });
      this._UserService.getShippingMethods().subscribe({
       next:(data)=>{this.shippingMethods=data},
       error:(e)=>{console.log(e)}
@@ -51,17 +61,30 @@ export class Order implements OnInit {
 
 
  checkout(){
-      console.log({...this.orderForm.value,shippingAddress:{...this.shippingForm.value}})
+    console.log({...this.orderForm.value,shippingAddress:{...this.shippingForm.value}})
 
     if(this.orderForm.valid&&this.shippingForm.valid){
       console.log({...this.orderForm.value,shippingAddress:{...this.shippingForm.value}})
       this._UserService.createOrder({...this.orderForm.value,shippingAddress:{...this.shippingForm.value}}).subscribe({
         next:(data)=>{
+          if(data.url){
           console.log(data)
-          window.open(data.url, '_blank');
+          window.open(data.url, '_blank');}
+          else{
+            console.log(data);
+            this.currentOrderId=data.order._id
+            this.paymentSuccess=true
+
+          }
         },
-        error:(e)=>{console.log(e)}
-      })
+        error:(e)=>{
+          if (e.error.message) {
+            this._NotificationService.show('ERROR', e.error.message, 'error');
+          } else {
+            this._NotificationService.show("something wrong", e.name, 'error');
+            console.log(e);
+          }
+      }})
     }else{
            console.log({...this.orderForm.value,shippingAddress:{...this.shippingForm.value}})
            this.orderForm.markAllAsTouched();

@@ -6,18 +6,16 @@ import { Router } from '@angular/router';
 import { CartModel } from '../../models/cart-model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-cart',
-  imports: [CurrencyPipe, DatePipe, ReactiveFormsModule],
+  imports: [CurrencyPipe, DatePipe],
   templateUrl: './cart.html',
   styleUrl: './cart.css',
 })
 export class Cart implements OnInit, OnDestroy {
   cart: CartModel | null = null;
   date = new Date();
-  shippingMethods:any=[]
 
   private destroy$ = new Subject<void>();
 
@@ -27,32 +25,13 @@ export class Cart implements OnInit, OnDestroy {
     private _Router: Router
   ) {}
 
-  orderForm = new FormGroup({
-    shippingAddress: new FormControl(null, [Validators.required]),
-    paymentMethod: new FormControl(null, [Validators.required]),
-    shippingMethodId: new FormControl(null, [Validators.required]),
-  });
 
-  get shippingAddress() {
-    return this.orderForm.get('shippingAddress');
-  }
-
-  get paymentMethod() {
-    return this.orderForm.get('paymentMethod');
-  }
-
-  get shippingMethodId() {
-    return this.orderForm.get('shippingMethodId');
-  }
 
   ngOnInit(): void {
     this._UserService.cart.pipe(takeUntil(this.destroy$)).subscribe((cart: CartModel | null) => {
       this.cart = cart;
     });
-    this._UserService.getShippingMethods().subscribe({
-      next:(data)=>{this.shippingMethods=data},
-      error:(e)=>{console.log(e)}
-    })
+ 
   }
 
   ngOnDestroy(): void {

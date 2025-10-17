@@ -46,8 +46,9 @@
         <!-- Cart -->
         <div class="w-full md:w-1/6 text-center">
           <button
-            class=" hover:text-primary-70 cursor-pointer"
+            class=" hover:text-primary-70 cursor-pointer disabled:hover:text-red-500 disabled:cursor-not-allowed"
             [ngClass]="isInCart(item.product._id) ? ' text-primary' : ' text-gray-500'"
+            [disabled]="item.product.quantity == 0 "
             (click)="cart(item.product._id); $event.stopPropagation()"
           >
             <i class="fa-solid fa-cart-shopping"></i>

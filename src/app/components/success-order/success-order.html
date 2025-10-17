@@ -1,0 +1,63 @@
+<div class="min-h-screen flex justify-center items-center">
+  @if(isLoading){
+  <span class="text-primary text-7xl"><i class="fas fa-spinner fa-spin"></i></span>
+  }@else{
+   
+  <div class="w-full max-w-lg">
+    <div role="alert" aria-live="polite" class="flex justify-center">
+      <div class="w-full bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 text-center">
+        <div class="inline-block p-6 rounded-2xl bg-green-50 border border-green-100 animate-[pop_500ms_ease-out_both]">
+
+          <!-- Icon -->
+          <div class="mx-auto w-28 h-28 flex items-center justify-center rounded-full bg-green-100/60 ring-4 ring-green-50 animate-[pop_520ms_cubic-bezier(.2,.9,.3,1)_both]">
+            <svg viewBox="0 0 120 120" class="w-20 h-20" aria-hidden="true">
+              <!-- Circle -->
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#bbf7d0" stroke-width="8"
+                class="stroke-dasharray-[1000] stroke-dashoffset-[1000] animate-[draw_700ms_ease_forwards_120ms]"></circle>
+              <!-- Check -->
+              <path d="M40 65 L55 80 L80 45" stroke="#16a34a" stroke-width="8" stroke-linecap="round"
+                stroke-linejoin="round"
+                class="opacity-0 origin-center animate-[pop_350ms_ease_600ms_both]"></path>
+              <!-- Pulse -->
+              <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(16,185,129,0.1)" stroke-width="16"
+                class="opacity-80 animate-pulse" />
+            </svg>
+          </div>
+
+          <h1 class="mt-6 text-2xl font-semibold text-green-700">Payment Successful!</h1>
+
+          <p class="mt-3 text-sm text-green-600/90 max-w-xs mx-auto">
+            Your payment has been processed successfully. Thank you for your purchase!
+          </p>
+
+          <div class="mt-5 text-xs text-green-600/80 flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 10l4.553 2.276A1 1 0 0120 13.17V18a2 2 0 01-2 2H6a2 2 0 01-2-2v-4.829a2 2 0 01.447-1.276L9 10m6 0V6a3 3 0 10-6 0v4"/>
+            </svg>
+            <span>Transaction ID: <strong class="text-green-700">#A1B2C3</strong></span>
+          </div>
+
+          <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <!-- Replace with routerLink or (click) in Angular -->
+            <a routerLink="/menu"
+              class="px-5 py-2 rounded-full bg-green-600 hover:bg-green-700 text-white font-medium shadow-sm transition-transform active:scale-95">
+              Continue
+            </a>
+
+            <a [routerLink]="['/order/',currentOrderId]"
+              class="px-5 py-2 rounded-full bg-white border border-gray-200 text-gray-700 font-medium shadow-sm hover:shadow-md">
+              View Receipt
+            </a>
+          </div>
+
+          <p class="mt-4 text-xs text-gray-500">
+            A confirmation email has been sent to your address.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  }
+</div>

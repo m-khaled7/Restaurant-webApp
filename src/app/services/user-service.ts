@@ -33,27 +33,22 @@ export class UserService {
 
   //  Wishlist Methods
 
-  getWishlist(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/wishlist`, this.getAuthHeaderOptions());
+  getWishlist(): Observable<WishlistModel> {
+    return this.http.get<WishlistModel>(`${this.apiUrl}/wishlist`, this.getAuthHeaderOptions());
   }
 
-  addWishlistItem(id: string): Observable<any> {
+  addWishlistItem(id: string): Observable<WishlistModel> {
     return this.http
-      .post(`${this.apiUrl}/wishlist/${id}`, {}, this.getAuthHeaderOptions())
+      .post<WishlistModel>(`${this.apiUrl}/wishlist/${id}`, {}, this.getAuthHeaderOptions())
       .pipe(tap(() => this.loadWishlist()));
   }
 
-  deleteWishlistItem(id: string): Observable<any> {
+  deleteWishlistItem(id: string): Observable<WishlistModel> {
     return this.http
-      .delete(`${this.apiUrl}/wishlist/${id}`, this.getAuthHeaderOptions())
+      .delete<WishlistModel>(`${this.apiUrl}/wishlist/${id}`, this.getAuthHeaderOptions())
       .pipe(tap(() => this.loadWishlist()));
   }
 
-  clearWishlist(): Observable<any> {
-    return this.http
-      .delete(`${this.apiUrl}/wishlist`, this.getAuthHeaderOptions())
-      .pipe(tap(() => this.loadWishlist()));
-  }
 
   loadWishlist(): void {
     if (!this.auth.userData.getValue()) return;
@@ -93,9 +88,9 @@ export class UserService {
     return this.http.get<CartModel>(`${this.apiUrl}/cart`, this.getAuthHeaderOptions());
   }
 
-  addCart(id: string): Observable<any> {
+  addCart(id: string): Observable<CartModel> {
     return this.http
-      .post(`${this.apiUrl}/cart/add`, { productId: id }, this.getAuthHeaderOptions())
+      .post<CartModel>(`${this.apiUrl}/cart/add`, { productId: id }, this.getAuthHeaderOptions())
       .pipe(tap(() => this.loadCart()));
   }
 
@@ -151,6 +146,9 @@ export class UserService {
   //orders
   getOrders(): Observable<any> {
     return this.http.get(`${this.apiUrl}/order/`, this.getAuthHeaderOptions());
+  }
+  getOrdersById(ID:string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/order/${ID}`, this.getAuthHeaderOptions());
   }
   createOrder(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/order`, data, this.getAuthHeaderOptions());
