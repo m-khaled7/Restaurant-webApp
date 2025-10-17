@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute,RouterLink } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { NotificationService } from '../../services/notification-service';
 import { ProductService } from '../../services/product-service';
 import { CurrencyPipe, NgClass } from '@angular/common';
-import { Review } from '../review/review';
+import { _Review } from '../review/review';
 import { AuthService } from '../../services/auth-service';
 import { UserService } from '../../services/user-service';
 import { ProductModel } from '../../models/product-model';
-import {WishlistItem}from "../../models/wishlist-model"
-import {cartItem}from "../../models/cart-model"
+import { WishlistItem } from '../../models/wishlist-model';
+import { cartItem } from '../../models/cart-model';
+import { Review } from '../../models/review';
 import { NotFound } from '../not-found/not-found';
-
 
 @Component({
   selector: 'app-product-details',
-  imports: [CurrencyPipe, Review, NgClass, RouterLink,NotFound],
+  imports: [CurrencyPipe, _Review, NgClass, RouterLink, NotFound],
   templateUrl: './product-details.html',
   styleUrl: './product-details.css',
 })
@@ -29,7 +29,7 @@ export class ProductDetails implements OnInit {
   ) {}
   productDetails!: ProductModel;
   similarProducts: ProductModel[] = [];
-  reviews: any = [];
+  reviews: Review[] = [];
   userData: any = {};
   user: any = {};
   wishlistIDs: Set<string> = new Set();
@@ -46,22 +46,22 @@ export class ProductDetails implements OnInit {
     if (this._AuthService.userData.getValue() != null) {
       this.isLogin = true;
       this._AuthService.userData.subscribe((data: any) => (this.userData = data));
-      this.user=JSON.parse(String(localStorage.getItem('user')))
+      this.user = JSON.parse(String(localStorage.getItem('user')));
     } else {
       this.isLogin = false;
     }
-     if (this.isLogin) {
-          this._UserService.wishlist.subscribe({
-            next: (w) => {
-              this.wishlistIDs = new Set(w?.items?.map((item: WishlistItem) => item.product._id));
-            },
-          });
-          this._UserService.cart.subscribe({
-            next: (w) => {
-              this.cartIDs = new Set(w?.items?.map((item: cartItem) => item.product._id));
-            },
-          });
-        }
+    if (this.isLogin) {
+      this._UserService.wishlist.subscribe({
+        next: (w) => {
+          this.wishlistIDs = new Set(w?.items?.map((item: WishlistItem) => item.product._id));
+        },
+      });
+      this._UserService.cart.subscribe({
+        next: (w) => {
+          this.cartIDs = new Set(w?.items?.map((item: cartItem) => item.product._id));
+        },
+      });
+    }
   }
 
   getData(ID: string) {
@@ -72,8 +72,8 @@ export class ProductDetails implements OnInit {
         this.getReviews(String(ID));
       },
       error: (e) => {
+        this._NotificationService.show('Something wrong', e.name, 'error');
         console.log(e);
-        
       },
     });
   }
@@ -85,11 +85,8 @@ export class ProductDetails implements OnInit {
         this.reviews = reviews.reverse();
       },
       error: (e) => {
-        if (e.error.message) {
-          this._NotificationService.show('ERROR', e.error.message, 'error');
-        } else {
-          this._NotificationService.show(e.name, e.message, 'error');
-        }
+        this._NotificationService.show('Something wrong', e.name, 'error');
+        console.log(e);
       },
     });
   }
@@ -106,7 +103,8 @@ export class ProductDetails implements OnInit {
           if (e.error.message) {
             this._NotificationService.show('ERROR', e.error.message, 'error');
           } else {
-            this._NotificationService.show(e.name, e.message, 'error');
+            this._NotificationService.show('Something wrong', e.name, 'error');
+            console.log(e);
           }
         },
       });
@@ -128,7 +126,8 @@ export class ProductDetails implements OnInit {
           if (e.error.message) {
             this._NotificationService.show('ERROR', e.error.message, 'error');
           } else {
-            this._NotificationService.show(e.name, e.message, 'error');
+            this._NotificationService.show('Something wrong', e.name, 'error');
+            console.log(e);
           }
         },
       });

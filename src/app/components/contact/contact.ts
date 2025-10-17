@@ -32,7 +32,7 @@ ngOnInit(): void {
     this.form.patchValue({message:""})
   }
 
-  submit(formdata:any){
+  submit(formdata:FormGroup){
     this.isLoading = true;
     if (this.form.valid) {
       this._UserService.contactus(formdata.value).subscribe({

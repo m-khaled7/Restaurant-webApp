@@ -10,7 +10,7 @@ import { NotificationService } from '../../services/notification-service';
   templateUrl: './review.html',
   styleUrl: './review.css',
 })
-export class Review {
+export class _Review {
   constructor(private _NotificationService: NotificationService) {}
   rating = 0;
   commentText = '';

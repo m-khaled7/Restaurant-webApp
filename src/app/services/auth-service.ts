@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { environment } from '../../environments/environment.development';
 import { Router } from '@angular/router';
+import {auth} from "../models/auth"
 
 @Injectable({
   providedIn: 'root',
@@ -40,24 +41,24 @@ export class AuthService {
     return { headers: new HttpHeaders() };
   }
 
-  signup(formdata: object): Observable<any> {
-    return this._HttpClient.post(this.apiUrl + '/auth/signup', formdata);
+  signup(formdata: object): Observable<auth> {
+    return this._HttpClient.post<auth>(this.apiUrl + '/auth/signup', formdata);
   }
 
-  login(formdata: object): Observable<any> {
-    return this._HttpClient.post(this.apiUrl + '/auth/login', formdata);
+  login(formdata: object): Observable<auth> {
+    return this._HttpClient.post<auth>(this.apiUrl + '/auth/login', formdata);
   }
 
-  verifyCode(formdata: object): Observable<any> {
-    return this._HttpClient.post(
+  verifyCode(formdata: object): Observable<auth> {
+    return this._HttpClient.post<auth>(
       this.apiUrl + '/auth/verify-code',
       formdata,
       this.getAuthHeaderOptions(this.getVerifyToken)
     );
   }
 
-  resendCode(): Observable<any> {
-    return this._HttpClient.get(
+  resendCode(): Observable<auth> {
+    return this._HttpClient.get<auth>(
       this.apiUrl + '/auth/send-code',
       this.getAuthHeaderOptions(this.getVerifyToken)
     );
@@ -69,11 +70,11 @@ export class AuthService {
     this.userData.next(null);
     this._Router.navigate(['/login']);
   }
-  forgetPassword(formdata: object): Observable<any> {
-    return this._HttpClient.post(this.apiUrl + '/auth/forgot-password', formdata);
+  forgetPassword(formdata: object): Observable<auth> {
+    return this._HttpClient.post<auth>(this.apiUrl + '/auth/forgot-password', formdata);
   }
-  resetPassword(data: object): Observable<any> {
-    return this._HttpClient.post(this.apiUrl + '/auth/reset-password', data);
+  resetPassword(data: object): Observable<auth> {
+    return this._HttpClient.post<auth>(this.apiUrl + '/auth/reset-password', data);
   }
 
 }

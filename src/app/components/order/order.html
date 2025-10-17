@@ -143,7 +143,9 @@
         class="w-full border rounded p-2"
         placeholder="Giza (optional)"
       />
-      
+       @if (shippingForm.get('state')?.touched && shippingForm.get('state')?.invalid) {
+        <p class="text-sm text-red-600 mt-1">State is required.</p>
+      }
     </div>
 
     <!-- Postal Code -->

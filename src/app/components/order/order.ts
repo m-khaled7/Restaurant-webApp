@@ -68,10 +68,8 @@ export class Order implements OnInit {
       this._UserService.createOrder({...this.orderForm.value,shippingAddress:{...this.shippingForm.value}}).subscribe({
         next:(data)=>{
           if(data.url){
-          console.log(data)
           window.open(data.url, '_blank');}
           else{
-            console.log(data);
             this.currentOrderId=data.order._id
             this.paymentSuccess=true
 

@@ -98,7 +98,7 @@
         <div class="flex my-10">
           <img class="w-10 h-10 bg-gray-700 rounded-full mr-3 object-cover" [src]="item.userId.image" alt="">
           <div>
-            <p>{{item.userId.name}}</p>
+            <p>{{item?.userId?.name}}</p>
             <div class="flex gap-1">
               @for (star of stars; track star; let i = $index) {
               <i class="fa-star  text-sm" [ngClass]="{

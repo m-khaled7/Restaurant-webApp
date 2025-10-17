@@ -1,18 +1,22 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CurrencyPipe ,NgClass} from '@angular/common';
+import { CurrencyPipe, NgClass } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Subject, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil, catchError, switchMap } from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  takeUntil,
+  catchError,
+  switchMap,
+} from 'rxjs/operators';
 import { ProductService } from '../../services/product-service';
 import { NotificationService } from '../../services/notification-service';
 import { AuthService } from '../../services/auth-service';
 import { UserService } from '../../services/user-service';
-import {ProductModel,subcategory}from "../../models/product-model"
-import {WishlistItem}from "../../models/wishlist-model"
-import {cartItem}from "../../models/cart-model"
-
-
+import { ProductModel, _Products, subcategory } from '../../models/product-model';
+import { WishlistItem } from '../../models/wishlist-model';
+import { cartItem } from '../../models/cart-model';
 
 @Component({
   selector: 'app-products',
@@ -31,7 +35,7 @@ export class Products implements OnInit {
   isFilterOpen: boolean = false;
   currentPage: number = 1;
   totalPages: number = 1;
-  sizes:string[]=["small","medium","large"]
+  sizes: string[] = ['small', 'medium', 'large'];
   constructor(
     private _ProductService: ProductService,
     private _NotificationService: NotificationService,
@@ -46,12 +50,11 @@ export class Products implements OnInit {
       min: [''],
       max: [''],
       subcategoryId: [''],
-      sizes:[""],
+      sizes: [''],
       page: [1],
       limit: [20],
     });
   }
-
 
   ngOnInit(): void {
     this._AuthService.userData.subscribe({
@@ -83,8 +86,7 @@ export class Products implements OnInit {
       .getSubcategories()
       .subscribe((data) => (this.subcategories = data.subcategories));
 
-    
-    //  initialize form and current page from current query params 
+    //  initialize form and current page from current query params
     const qp = this._ActivatedRoute.snapshot.queryParams;
     const initial = {
       search: qp['search'] || '',
@@ -113,7 +115,7 @@ export class Products implements OnInit {
         { emitEvent: false }
       );
       this.currentPage = +params['page'] || 1;
-      this.loadProducts(); 
+      this.loadProducts();
     });
 
     this.form.valueChanges
@@ -121,60 +123,50 @@ export class Products implements OnInit {
         debounceTime(350),
         distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
         takeUntil(this.destroy$),
-        switchMap((val) => {  
-        this.updateQueryParams(val); 
-        return of(val); })
+        switchMap((val) => {
+          this.updateQueryParams(val);
+          return of(val);
+        })
       )
       .subscribe(() => {
-        this.loadProducts()
+        this.loadProducts();
       });
 
     // load products
     this.loadProducts();
   }
 
-//buils fillter for backend request from form 
+  //buils fillter for backend request from form
   private buildFiltersFromForm() {
     const v = this.form.value;
-   
+
     return {
       search: v.search || undefined,
       min: v.min || undefined,
       max: v.max || undefined,
       subcategoryId: v.subcategoryId || undefined,
-      sizes:v.sizes || undefined,
+      sizes: v.sizes || undefined,
       page: v.page || undefined,
       limit: v.limit || undefined,
     };
   }
 
-
   loadProducts() {
     const filters = this.buildFiltersFromForm();
     this._ProductService
       .getProducts(filters)
-      .pipe(
-        takeUntil(this.destroy$),
-        catchError((err) => {
-          console.error(err);
-          return of([] as ProductModel[]);
-        })
-      )
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
           this.productsList = data.products;
-          this.totalPages=data.totalPages
+          this.totalPages = data.totalPages;
         },
         error: (e) => {
-          if (e.error.message) {
-            this._NotificationService.show('ERROR', e.error.message, 'error');
-          } else {
-            this._NotificationService.show(e.name, e.message, 'error');
-          }
+          this._NotificationService.show('Something wrong', e.name, 'error');
+          console.log(e);
         },
       });
   }
-
 
   resetFilters() {
     this.form.patchValue(
@@ -187,7 +179,7 @@ export class Products implements OnInit {
         page: 1,
       },
       { emitEvent: false }
-    ); 
+    );
 
     // reset URL query params
     this._Router.navigate([], {
@@ -199,44 +191,43 @@ export class Products implements OnInit {
     this.loadProducts();
   }
 
-  
-updateQueryParams(val: any) {
-  const cleaned: any = {};
-  Object.keys(val).forEach((k) => {
-    const v = val[k];
-    if (v !== null && v !== undefined && v !== '') {
-      cleaned[k] = v;
-    }
-  });
+  updateQueryParams(val: any) {
+    const cleaned: any = {};
+    Object.keys(val).forEach((k) => {
+      const v = val[k];
+      if (v !== null && v !== undefined && v !== '') {
+        cleaned[k] = v;
+      }
+    });
 
-  this._Router.navigate([], {
-    relativeTo: this._ActivatedRoute,
-    queryParams: cleaned,
-    queryParamsHandling: 'merge',
-  });
-}
+    this._Router.navigate([], {
+      relativeTo: this._ActivatedRoute,
+      queryParams: cleaned,
+      queryParamsHandling: 'merge',
+    });
+  }
 
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
 
-goToPage(page: number) {
-  if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
 
-  this.currentPage = page;
+    // Update query params so URL stays in sync
+    this._Router.navigate([], {
+      relativeTo: this._ActivatedRoute,
+      queryParams: { page: this.currentPage },
+      queryParamsHandling: 'merge',
+    });
 
-  // Update query params so URL stays in sync
-  this._Router.navigate([], {
-    relativeTo: this._ActivatedRoute,
-    queryParams: { page: this.currentPage },
-    queryParamsHandling: 'merge',
-  });
+    // Reload products
+    this.loadProducts();
+  }
 
-  // Reload products
-  this.loadProducts();
-}
-
-get pagesArray(): number[] {
-  return Array(this.totalPages).fill(0).map((x, i) => i + 1);
-}
-
+  get pagesArray(): number[] {
+    return Array(this.totalPages)
+      .fill(0)
+      .map((x, i) => i + 1);
+  }
 
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;

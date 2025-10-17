@@ -6,6 +6,8 @@ import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { NotificationService } from './notification-service';
 import { CartModel } from '../models/cart-model';
 import { WishlistModel } from '../models/wishlist-model';
+import { Reviews, Review } from '../models/review';
+import { Order, ShippingMethod } from '../models/order';
 
 @Injectable({
   providedIn: 'root',
@@ -21,15 +23,12 @@ export class UserService {
     private _NotificationService: NotificationService
   ) {}
 
-
   private getAuthHeaderOptions() {
     const token = localStorage.getItem('userToken');
     return {
       headers: token ? new HttpHeaders({ Authorization: `Bearer ${token}` }) : new HttpHeaders(),
     };
   }
-
- 
 
   //  Wishlist Methods
 
@@ -49,7 +48,6 @@ export class UserService {
       .pipe(tap(() => this.loadWishlist()));
   }
 
-
   loadWishlist(): void {
     if (!this.auth.userData.getValue()) return;
     this.getWishlist().subscribe({
@@ -64,7 +62,8 @@ export class UserService {
         if (e.error.message) {
           this._NotificationService.show('ERROR', e.error.message, 'error');
         } else {
-          this._NotificationService.show(e.name, e.message, 'error');
+          this._NotificationService.show('Something wrong', e.name, 'error');
+          console.log(e);
         }
       },
     });
@@ -76,7 +75,8 @@ export class UserService {
         if (e.error.message) {
           this._NotificationService.show('ERROR', e.error.message, 'error');
         } else {
-          this._NotificationService.show(e.name, e.message, 'error');
+          this._NotificationService.show('Something wrong', e.name, 'error');
+          console.log(e);
         }
       },
     });
@@ -94,21 +94,25 @@ export class UserService {
       .pipe(tap(() => this.loadCart()));
   }
 
-  deleteCartItem(id: string): Observable<any> {
+  deleteCartItem(id: string): Observable<CartModel> {
     return this.http
-      .delete(`${this.apiUrl}/cart/remove/${id}`, this.getAuthHeaderOptions())
+      .delete<CartModel>(`${this.apiUrl}/cart/remove/${id}`, this.getAuthHeaderOptions())
       .pipe(tap(() => this.loadCart()));
   }
 
-  updateQuantity(id: string, quantity: number): Observable<any> {
+  updateQuantity(id: string, quantity: number): Observable<CartModel> {
     return this.http
-      .patch(`${this.apiUrl}/cart/update/${id}`, { quantity }, this.getAuthHeaderOptions())
+      .patch<CartModel>(
+        `${this.apiUrl}/cart/update/${id}`,
+        { quantity },
+        this.getAuthHeaderOptions()
+      )
       .pipe(tap(() => this.loadCart()));
   }
 
-  clearCart(): Observable<any> {
+  clearCart(): Observable<CartModel> {
     return this.http
-      .delete(`${this.apiUrl}/cart/clear`, this.getAuthHeaderOptions())
+      .delete<CartModel>(`${this.apiUrl}/cart/clear`, this.getAuthHeaderOptions())
       .pipe(tap(() => this.loadCart()));
   }
 
@@ -126,7 +130,8 @@ export class UserService {
         if (e.error.message) {
           this._NotificationService.show('ERROR', e.error.message, 'error');
         } else {
-          this._NotificationService.show(e.name, e.message, 'error');
+          this._NotificationService.show('Something wrong', e.name, 'error');
+          console.log(e);
         }
       },
     });
@@ -138,38 +143,52 @@ export class UserService {
         if (e.error.message) {
           this._NotificationService.show('ERROR', e.error.message, 'error');
         } else {
-          this._NotificationService.show(e.name, e.message, 'error');
+          this._NotificationService.show('Something wrong', e.name, 'error');
+          console.log(e);
         }
       },
     });
   }
   //orders
-  getOrders(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/order/`, this.getAuthHeaderOptions());
+  getOrders(): Observable<Order> {
+    return this.http.get<Order>(`${this.apiUrl}/order/`, this.getAuthHeaderOptions());
   }
-  getOrdersById(ID:string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/order/${ID}`, this.getAuthHeaderOptions());
+  getOrdersById(ID: string): Observable<Order> {
+    return this.http.get<Order>(`${this.apiUrl}/order/${ID}`, this.getAuthHeaderOptions());
   }
-  createOrder(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/order`, data, this.getAuthHeaderOptions());
-  }
-
-  paidOrder(ID: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/order/${ID}/mark-paid`, this.getAuthHeaderOptions());
+  createOrder(data: any): Observable<Order> {
+    return this.http.post<Order>(`${this.apiUrl}/order`, data, this.getAuthHeaderOptions());
   }
 
-  getShippingMethods(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/shipping-method/`, this.getAuthHeaderOptions());
+  paidOrder(ID: string): Observable<Order> {
+    return this.http.get<Order>(
+      `${this.apiUrl}/order/${ID}/mark-paid`,
+      this.getAuthHeaderOptions()
+    );
+  }
+
+  getShippingMethods(): Observable<ShippingMethod[]> {
+    return this.http.get<ShippingMethod[]>(
+      `${this.apiUrl}/shipping-method/`,
+      this.getAuthHeaderOptions()
+    );
   }
 
   //  Reviews
 
-  createReview(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/user/create-review`, data, this.getAuthHeaderOptions());
+  createReview(data: any): Observable<Review> {
+    return this.http.post<Review>(
+      `${this.apiUrl}/user/create-review`,
+      data,
+      this.getAuthHeaderOptions()
+    );
   }
 
-  deleteReview(ID: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/user/delete-review/` + ID, this.getAuthHeaderOptions());
+  deleteReview(ID: string): Observable<Reviews> {
+    return this.http.delete<Reviews>(
+      `${this.apiUrl}/user/delete-review/` + ID,
+      this.getAuthHeaderOptions()
+    );
   }
 
   //contact

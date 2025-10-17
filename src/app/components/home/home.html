@@ -17,10 +17,14 @@
 
 
   <swiper-container [slidesPerView]="5" [loop]="true" autoplay="true" [breakpoints]="breakpoints" class="h-96">
-    @for (product of productsList; track $index) {
+    @for (product of productsOffers; track $index) {
     <swiper-slide>
-      <div class="bg-white w-72 rounded-2xl p-4 shadow-md cursor-pointer" (click)="details(product._id)">
+      <div class="bg-white w-72 rounded-2xl p-4 shadow-md cursor-pointer relative" (click)="details(product._id)">
         <img class="w-full h-60 bg-second rounded-lg object-cover" [src]="product.image[0]" alt="" />
+        <div class="absolute top-5 left-5">
+          <img class="h-15 w-15" src="offer.png" alt="">
+          <span class="absolute top-4 left-3 text-xl text-white" > {{product.offerId.discountPercentage}}%  </span>
+        </div>
         <div class="py-1">
           <h1 class="text-lg font-bold py-1">{{ product?.name }}</h1>
           @if(product?.discountedPrice){
@@ -38,6 +42,7 @@
 
           }
         </div>
+        <div class="font-bold text-lg"> Ends At <span class="text-md  text-red-500" >{{product.offerId.endDate | date}} </span></div>
       </div>
     </swiper-slide>
     }
@@ -144,10 +149,11 @@
   @for (Review of testimonials; track $index) {
   <swiper-slide>
     <div class=" flex bg-white  hover:shadow-lg rounded-2xl shadow-lg p-4 w-sm h-32 ">
-      <img class="w-10 h-10 bg-gray-700 rounded-full mr-3 object-cover" [src]="Review.userId.image" alt="">
+      <img class="w-24 h-24 bg-gray-700 rounded-xl mr-3 object-cover" [src]="Review.productId.image[0]" alt="">
       <div>
-        <p class="text-xl my-1">{{Review.userId.name}}</p>
-        <div class="flex gap-1 my-2">
+        <p class="text-xl mb-1">{{Review.productId.name}}</p>
+        <p class="text-md my-1">{{Review.userId.name}}</p>
+        <div class="flex gap-1 my-1">
 
           @for (star of stars; track star; let i = $index) {
               <i class="fa-star  text-sm" [ngClass]="{

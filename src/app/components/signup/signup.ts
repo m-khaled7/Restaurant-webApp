@@ -82,18 +82,19 @@ export class Signup {
     if (registerForm.valid) {
       this._AuthService.signup(registerForm.value).subscribe({
         next: (data) => {
-            localStorage.setItem('verifyToken', data.token);
-            this.isLoading = false;
-            this._NotificationService.show('Verify', data.message, 'info');
-            this._Router.navigate(['/verify-email']);
+          localStorage.setItem('verifyToken', data.token);
+          this.isLoading = false;
+          this._NotificationService.show('Verify', data.message, 'info');
+          this._Router.navigate(['/verify-email']);
         },
         error: (e) => {
           console.log(e);
-           if (e.error.message) {
+          if (e.error.message) {
             this._NotificationService.show('ERROR', e.error.message, 'error');
+          } else {
+            this._NotificationService.show('something wrong', e.name, 'error');
+            console.log(e);
           }
-            this._NotificationService.show("something wrong", e.name, 'error');
-          console.log(e)
           this.isLoading = false;
         },
       });

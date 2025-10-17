@@ -4,6 +4,7 @@ export interface CartModel {
   _id: string;
   user: string;
   items: cartItem[];
+  message:string;
   createdAt: string;
   updatedAt: string;
   __v: number;

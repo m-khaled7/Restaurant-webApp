@@ -53,10 +53,10 @@ export class VerifyCode {
         error: (e) => {
           if (e.error.message) {
             this._NotificationService.show('ERROR', e.error.message, 'error');
+          } else {
+            this._NotificationService.show('something wrong', e.name, 'error');
+            console.log(e);
           }
-          this._NotificationService.show('something wrong', e.name, 'error');
-
-          console.log(e);
           this.isLoading = false;
         },
       });

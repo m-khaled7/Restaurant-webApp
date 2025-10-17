@@ -17,8 +17,8 @@ export interface ShippingMethod {
   fee: number;
   estimatedDays: number;
   isActive: boolean;
-  createdAt: string;   // ISO date string
-  updatedAt: string;   // ISO date string
+  createdAt: string;   
+  updatedAt: string;   
   __v: number;
 }
 export interface ShippingAddress {
@@ -39,12 +39,14 @@ export interface Order {
   tax: number;
   deliveryFee: number;
   total: number;
+  url:string;
+  order:Order
   shippingMethod: ShippingMethod;
   paymentMethod: string;
   paymentStatus: string;
   orderStatus: string;
   shippingAddress: ShippingAddress;
-  statusHistory: any[]; // You can define a specific interface if needed
+  statusHistory: any[]; 
   createdAt: string;
   updatedAt: string;
   __v: number;

@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {_Products ,Product, subcategories,Offers} from "../models/product-model"
+import {Reviews,testimonials} from "../models/review"
+
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +13,7 @@ export class ProductService {
   apiUrl: string = environment.apiUrl;
   constructor(public _HttpClient: HttpClient) {}
 
-  getProducts(filters: any = {}): Observable<any> {
+  getProducts(filters: any = {}): Observable<_Products> {
     let params = new HttpParams();
 
     Object.keys(filters).forEach((key) => {
@@ -20,24 +23,27 @@ export class ProductService {
       }
     });
 
-    return this._HttpClient.get(this.apiUrl + '/products', { params });
+    return this._HttpClient.get<_Products>(this.apiUrl + '/products', { params });
   }
 
-  productDetails(ID: string): Observable<any> {
-    return this._HttpClient.get(this.apiUrl + '/products/' + ID);
+  productDetails(ID: string): Observable<Product> {
+    return this._HttpClient.get<Product>(this.apiUrl + '/products/' + ID);
   }
 
-  getSubcategories(): Observable<any> {
-    return this._HttpClient.get(this.apiUrl + '/products/get-subcategories');
+  getSubcategories(): Observable<subcategories> {
+    return this._HttpClient.get<subcategories>(this.apiUrl + '/products/get-subcategories');
   }
 
-  getReviews(ID: string): Observable<any> {
-    return this._HttpClient.get(this.apiUrl + '/user/get-reviews/' + ID);
+  getReviews(ID: string): Observable<Reviews> {
+    return this._HttpClient.get<Reviews>(this.apiUrl + '/user/get-reviews/' + ID);
   }
-  getTestimonials(): Observable<any> {
-    return this._HttpClient.get(this.apiUrl + '/user/testimonials');
+  
+  getTestimonials(): Observable<testimonials> {
+    return this._HttpClient.get<testimonials>(this.apiUrl + '/user/testimonials');
   }
-  getOffers(): Observable<any> {
-    return this._HttpClient.get(this.apiUrl + '/user/offers');
+
+
+  getOffers(): Observable<Offers> {
+    return this._HttpClient.get<Offers>(this.apiUrl + '/user/offers');
   }
 }
