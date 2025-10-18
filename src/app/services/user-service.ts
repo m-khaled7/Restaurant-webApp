@@ -197,4 +197,17 @@ export class UserService {
   contactus(formdata: object): Observable<any> {
     return this.http.post(this.apiUrl + '/auth/contactUs', formdata, this.getAuthHeaderOptions());
   }
+
+  
+
+
+  updateProfile(name?: string, image?: File): Observable<any> {
+    const formData = new FormData();
+
+    if (name) formData.append('name', name);
+    if (image) formData.append('image', image);
+
+    return this.http.put(`${this.apiUrl}/user/update-profile`, formData, this.getAuthHeaderOptions());
+  
+  }
 }

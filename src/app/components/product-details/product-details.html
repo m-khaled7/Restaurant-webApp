@@ -1,156 +1,208 @@
-<div class="min-h-screen flex flex-col items-center py-20 md:px-12 px-3 ">
-  <div class="w-full ">
-    @if(productDetails){
-    <div class="flex flex-col lg:flex-row w-full p-3">
-      <img class="h-[388px] w-[388px] md:h-[500px]  md:w-[500px]  bg-gray-500 rounded-3xl object-cover"
-        [src]="productDetails.image[0]" alt="" />
-
-      <div class="p-5 grow">
-        <h1 class="text-3xl ">{{ productDetails.name }}</h1>
-
-        <p class="text-gray-600 mb-6 pl-2">
-          {{ productDetails.description }}
-        </p>
-
-@if (openMenuFor === productDetails._id) {
-  <div class="flex gap-3 py-2">
-
-    @for (i of productDetails.sizes; track $index) {
-      <div
-        class="border border-black rounded-md px-2 w-fit transition-all cursor-pointer"
-        (click)="addToCart(productDetails._id, i); $event.stopPropagation()"
-        [ngClass]="
-          isInCart(productDetails._id)
-            ? 'bg-black text-white hover:text-black'
-            : 'hover:bg-black hover:text-white'
-        "
-      >
-        {{ i }}
+<div class="min-h-screen flex flex-col items-center py-16 md:px-10 px-4 mt-20 bg-gray-50">
+  <div class="w-full max-w-7xl">
+    @if (productDetails) {
+    <div class="flex flex-col lg:flex-row w-full bg-white rounded-3xl shadow-md overflow-hidden">
+      <!-- Product Image -->
+      <div class="flex justify-center items-center bg-gray-100 lg:w-1/2">
+        <img
+          class="h-[400px] w-[400px] md:h-[500px] md:w-[500px] object-cover rounded-3xl shadow-sm transition-transform duration-300 hover:scale-[1.02]"
+          [src]="productDetails.image[0]"
+          alt=""
+        />
       </div>
-    }
 
-  </div>
-}
-     
-        @if(productDetails.discountedPrice){
-        <h5 class="text-2xl font-bold text-primary">
-          {{ productDetails.discountedPrice | currency : 'EGP' }}
-          <span class="text-sm text-gray-400 line-through">{{
-            productDetails.price | currency : 'EGP'
-            }}</span>
-        </h5>
+      <!-- Product Details -->
+      <div class="p-8 lg:w-1/2 flex flex-col justify-between">
+        <div>
+          <h1 class="text-3xl font-semibold text-gray-800 mb-3">{{ productDetails.name }}</h1>
+          <p class="text-gray-600 leading-relaxed mb-5">
+            {{ productDetails.description }}
+          </p>
 
-        }@else{
-        <h5 class="text-2xl font-bold text-primary">
-          {{ productDetails.price | currency : 'EGP' }}
-        </h5>
-
-        }
-        <h2 class="text-2xl my-4 text-primary font-bold"></h2>
-        <div class="flex items-center">
-          <button
-            class="w-fit py-1 px-3 flex items-center mr-4 justify-center  bg-opacity-80 rounded-full border border-gray-300 transition-all cursor-pointer disabled:cursor-not-allowed disabled:hover:text-gray-500 "
-            (click)="cart(productDetails._id); $event.stopPropagation()" [disabled]="!isLogin"
-            [ngClass]="isInCart(productDetails._id) ? 'bg-black text-white hover:bg-gray-600' : 'bg-white text-balck hover:bg-black hover:text-white '">
-              @if (isInCart(productDetails._id)) { <span>Added To Cart</span> }@else{ <span>Add To Cart</span> }
-            
-
-          </button>
-          <button
-            class="w-8 h-8 flex items-center justify-center bg-white bg-opacity-80 rounded-full border hover:bg-primary hover:text-black transition-all border-gray-300 cursor-pointer disabled:hover:text-gray-300 disabled:cursor-not-allowed"
-            (click)="wishlist(productDetails._id); $event.stopPropagation()" [disabled]="!isLogin"
-            [ngClass]="isInWishlist(productDetails._id) ? ' text-primary' : '  text-black'">
-
-            <i [ngClass]="
-                    isInWishlist(productDetails._id) ? ' fa-solid' : 'text-black fa-regular'
-                  " class="fa-heart "></i>
-          </button>
-          
-        </div>
-      </div>
-    </div>
-    <div>
-      <div class="flex justify-between items-center">
-        <h1 class="my-5 text-2xl">Similar products</h1>
-        <a [routerLink]="['/menu']" [queryParams]="{ subcategoryId: productDetails.subcategoryId }"
-          class="border border-primary p-1 px-3 h-fit rounded-full text-sm hover:bg-primary hover:text-white cursor-pointer">
-          Show More
-        </a>
-      </div>
-      <div
-        class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-12 w-fit mx-auto">
-        @for (product of similarProducts; track $index) {
-        <div class="bg-white w-72 rounded-2xl p-4 shadow-md cursor-pointer" (click)="details(product._id)">
-          <img class="w-full h-60  bg-second rounded-lg object-cover" [src]="product?.image?.[0]" alt="" />
-          <div class="py-1">
-            <h1 class="text-lg font-bold py-1">{{ product?.name }}</h1>
-            @if(product?.discountedPrice){
-            <h5 class="text-xl font-bold text-primary py-1">
-              {{ product?.discountedPrice | currency : 'EGP' }}
-              <span class="text-sm text-gray-400 line-through">{{
-                product?.price | currency : 'EGP'
-                }}</span>
-            </h5>
-
-            }@else{
-            <h5 class="text-xl font-bold text-primary py-1">
-              {{ product?.price | currency : 'EGP' }}
-            </h5>
-
-            }
-          </div>
-        </div>
-        }
-      </div>
-    </div>
-    <div class="mt-7">
-      @if(isLogin){
-      <h1 class="text-xl">Create Review</h1>
-      <app-review (addComment)="handleAddComment($event)" [user]="user"></app-review>}
-      <h1 class="my-5 text-xl">Reviews</h1>
-
-      <div>
-        @for (item of reviews; track $index) {
-        <div class="flex my-10">
-          <img class="w-10 h-10 bg-gray-700 rounded-full mr-3 object-cover" [src]="item.userId.image" alt="">
-          <div>
-            <p>{{item?.userId?.name}}</p>
-            <div class="flex gap-1">
-              @for (star of stars; track star; let i = $index) {
-              <i class="fa-star  text-sm" [ngClass]="{
-                  'fa-solid text-primary': i < item.rating,
-                  'fa-regular': i >= item.rating
-                }"></i>
-              }
+          <!-- Sizes -->
+          @if (openMenuFor === productDetails._id) {
+          <div class="flex gap-3 flex-wrap py-3">
+            @for (i of productDetails.sizes; track $index) {
+            <div
+              class="border border-gray-400 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer"
+              (click)="addToCart(productDetails._id, i); $event.stopPropagation()"
+              [ngClass]="
+                isInCart(productDetails._id)
+                  ? 'bg-black text-white hover:bg-gray-800'
+                  : 'hover:bg-black hover:text-white text-gray-700'
+              "
+            >
+              {{ i }}
             </div>
-            <p class="text-md text-gray-700">{{item.comment}}</p>
-          </div>
-          @if(item.userId._id == userData.userId){
-          <div class="relative grow">
-            <button (click)="toggleMenu(item._id)" class="absolute right-0 cursor-pointer text-xl">
-              <i class="fa-solid fa-ellipsis"></i>
-            </button>
-            @if (openMenuFor === item._id) {
-            <ul
-              class="absolute right-0 top-6 border border-gray-200/50 p-1 list-none rounded-md min-w-[120px] shadow-lg">
-              <li class="text-center rounded-md cursor-pointer bg-red-500 text-gray-100 hover:bg-red-600"
-                (click)="confirmDelete(item._id)">
-                Delete
-              </li>
-
-            </ul>
             }
           </div>
           }
 
+          <!-- Pricing -->
+          @if (productDetails.discountedPrice) {
+          <h5 class="text-2xl font-bold text-primary mb-6">
+            {{ productDetails.discountedPrice | currency : 'EGP' }}
+            <span class="text-gray-400 line-through text-sm font-normal ml-2">
+              {{ productDetails.price | currency : 'EGP' }}
+            </span>
+          </h5>
+          } @else {
+          <h5 class="text-2xl font-bold text-primary mb-6">
+            {{ productDetails.price | currency : 'EGP' }}
+          </h5>
+          }
+
+          <!-- Buttons -->
+          <div class="flex items-center gap-4">
+            <button
+              class="py-2 px-6 rounded-full border border-gray-300 transition-all duration-200 font-medium text-sm shadow-sm"
+              (click)="cart(productDetails._id); $event.stopPropagation()"
+              [disabled]="!isLogin"
+              [ngClass]="
+                isInCart(productDetails._id)
+                  ? 'bg-black text-white hover:bg-gray-700'
+                  : 'bg-white text-black hover:bg-black hover:text-white'
+              "
+            >
+              @if (isInCart(productDetails._id)) {
+              <span>Added To Cart</span>
+              } @else {
+              <span>Add To Cart</span>
+              }
+            </button>
+
+            <button
+              class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 bg-white transition-all duration-200 shadow-sm hover:bg-primary hover:text-white"
+              (click)="wishlist(productDetails._id); $event.stopPropagation()"
+              [disabled]="!isLogin"
+              [ngClass]="isInWishlist(productDetails._id) ? 'text-primary' : 'text-gray-700'"
+            >
+              <i
+                [ngClass]="
+                  isInWishlist(productDetails._id) ? 'fa-solid' : 'fa-regular'
+                "
+                class="fa-heart"
+              ></i>
+            </button>
+          </div>
         </div>
-        }
-
-
       </div>
     </div>
-    }@else {
-      <app-not-found/>
+
+    <!-- Similar Products -->
+    <div class="mt-12">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Similar Products</h1>
+        <a
+          [routerLink]="['/menu']"
+          [queryParams]="{ subcategoryId: productDetails.subcategoryId }"
+          class="border border-primary px-4 py-1 rounded-full text-sm font-medium text-primary hover:bg-primary hover:text-white transition-all duration-200"
+        >
+          Show More
+        </a>
+      </div>
+
+      <div
+        class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8"
+      >
+        @for (product of similarProducts; track $index) {
+        <div
+          class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 p-4 cursor-pointer"
+          (click)="details(product._id)"
+        >
+          <div class="relative overflow-hidden rounded-xl">
+            <img
+              class="w-full h-60 object-cover transition-transform duration-300 hover:scale-[1.05]"
+              [src]="product?.image?.[0]"
+              alt=""
+            />
+          </div>
+          <div class="pt-3">
+            <h1 class="text-lg font-semibold text-gray-800 truncate">
+              {{ product?.name }}
+            </h1>
+
+            @if (product?.discountedPrice) {
+            <h5 class="text-xl font-bold text-primary py-1">
+              {{ product?.discountedPrice | currency : 'EGP' }}
+              <span class="text-gray-400 text-sm line-through ml-2">
+                {{ product?.price | currency : 'EGP' }}
+              </span>
+            </h5>
+            } @else {
+            <h5 class="text-xl font-bold text-primary py-1">
+              {{ product?.price | currency : 'EGP' }}
+            </h5>
+            }
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="mt-14 bg-white rounded-2xl p-6 shadow-sm">
+      @if (isLogin) {
+      <h1 class="text-2xl font-bold mb-4">Create Review</h1>
+      <app-review (addComment)="handleAddComment($event)" [user]="user"></app-review>
+      }
+@if (reviews.length >0) {
+      <h1 class="text-2xl font-bold mb-4">Reviews</h1>
+}
+      <div class="space-y-8">
+        @for (item of reviews; track $index) {
+        <div class="flex items-start gap-3 border-b border-gray-100 pb-5">
+          <img
+            class="w-10 h-10 rounded-full object-cover bg-gray-200"
+            [src]="item.userId.image"
+            alt=""
+          />
+          <div class="flex-1">
+            <p class="font-medium text-gray-800">{{ item?.userId?.name }}</p>
+            <div class="flex gap-1 my-1">
+              @for (star of stars; track star; let i = $index) {
+              <i
+                class="fa-star text-sm"
+                [ngClass]="{
+                  'fa-solid text-primary': i < item.rating,
+                  'fa-regular text-gray-400': i >= item.rating
+                }"
+              ></i>
+              }
+            </div>
+            <p class="text-gray-700 text-sm">{{ item.comment }}</p>
+          </div>
+
+          @if (item.userId._id == userData.userId) {
+          <div class="relative">
+            <button
+              (click)="toggleMenu(item._id)"
+              class="text-gray-500 hover:text-gray-700"
+            >
+              <i class="fa-solid fa-ellipsis"></i>
+            </button>
+
+            @if (openMenuFor === item._id) {
+            <ul
+              class="absolute right-0 top-6 bg-white border border-gray-200 rounded-md shadow-md text-sm"
+            >
+              <li
+                class="text-center px-4 py-2 text-red-500 hover:bg-red-50 cursor-pointer rounded-md"
+                (click)="confirmDelete(item._id)"
+              >
+                Delete
+              </li>
+            </ul>
+            }
+          </div>
+          }
+        </div>
+        }
+      </div>
+    </div>
+
+    } @else {
+    <app-not-found />
     }
   </div>
 </div>

@@ -1,6 +1,37 @@
 <div class="flex flex-col justify-center items-center h-screen">
   <img class="h-[300px] w-[300px] object-cover rounded-full" [src]="user.image" alt="" />
-  <h1 class="text-2xl mb-20 text-center"> {{user.name}} </h1>
+ <h1 class="text-2xl mb-4 text-center"> {{user.name}} </h1>
+  <div class="max-w-md mx-auto mb-20 bg-white p-6 rounded-2xl shadow-md">
+  <h2 class="text-xl font-semibold ">Update Profile</h2>
+
+  <input
+    type="text"
+    placeholder="Enter your name"
+    [(ngModel)]="name"
+    class="w-full border p-2 rounded mb-3 outline-none focus:ring-2 focus:ring-primary"
+  />
+
+  <input
+    type="file"
+    (change)="onFileSelected($event)"
+    accept="image/*"
+    class="mb-3"
+  />
+
+  <button
+    (click)="updateProfile()"
+    class="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 cursor-pointer"
+  >@if(isLoading){
+        <i class="fas fa-spinner fa-spin"></i>
+        }@else{
+        <span>Update</span>
+        }
+  </button>
+
+  <p class="mt-3 text-sm text-gray-700">{{ message }}</p>
+</div>
+  
+
     <button class="bg-red-600 py-2 my-2 text-white rounded-lg hover:bg-red-700 w-96 cursor-pointer" (click)="signout()">LogOut</button>
 
 </div>
