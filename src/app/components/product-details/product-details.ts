@@ -159,13 +159,18 @@ export class ProductDetails implements OnInit {
       this._NotificationService.show('ERROR', 'please Login frist', 'error');
     }
   }
+  addToCart(prodID:string,size:string){
+    this._UserService.addToCart(prodID,size)
+    this.toggleMenu(prodID)
+
+  }
 
   cart(prodID: string) {
     if (this.isLogin) {
       if (this.isInCart(prodID)) {
         this._UserService.deleteFromCart(prodID);
       } else {
-        this._UserService.addToCart(prodID);
+         this.toggleMenu(prodID)
       }
     } else {
       this._NotificationService.show('ERROR', 'please Login frist', 'error');

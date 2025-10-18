@@ -3,6 +3,8 @@ import {RouterLink,RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 import { UserService } from '../../services/user-service';
 import { NgClass } from '@angular/common';
+import { cartItem } from '../../models/cart-model';
+
 
 
 @Component({
@@ -15,6 +17,7 @@ export class Navbar implements OnInit {
   constructor(private _AuthService:AuthService,private _UserService:UserService){}
   isLogin:boolean=false
   isOpen: boolean = false;
+  cartIDs: Set<string> = new Set();
 
   user:any={}
 
@@ -33,6 +36,15 @@ export class Navbar implements OnInit {
         }
       }
     })
+
+    if (this.isLogin) {
+
+              this._UserService.cart.subscribe({
+                next: (w) => {
+                  this.cartIDs = new Set(w?.items?.map((item: cartItem) => item.product._id));
+                },
+              });
+            }
   }
 
   logout(){

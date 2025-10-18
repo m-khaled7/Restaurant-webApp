@@ -88,9 +88,9 @@ export class UserService {
     return this.http.get<CartModel>(`${this.apiUrl}/cart`, this.getAuthHeaderOptions());
   }
 
-  addCart(id: string): Observable<CartModel> {
+  addCart(id: string,size:string="small"): Observable<CartModel> {
     return this.http
-      .post<CartModel>(`${this.apiUrl}/cart/add`, { productId: id }, this.getAuthHeaderOptions())
+      .post<CartModel>(`${this.apiUrl}/cart/add`, { productId: id ,sizes:size}, this.getAuthHeaderOptions())
       .pipe(tap(() => this.loadCart()));
   }
 
@@ -124,9 +124,11 @@ export class UserService {
     });
   }
 
-  addToCart(prodID: string) {
-    this.addCart(prodID).subscribe({
+  addToCart(prodID: string,size:string="small") {
+    this.addCart(prodID,size).subscribe({
       error: (e) => {
+          console.log(e);
+
         if (e.error.message) {
           this._NotificationService.show('ERROR', e.error.message, 'error');
         } else {
@@ -150,8 +152,8 @@ export class UserService {
     });
   }
   //orders
-  getOrders(): Observable<Order> {
-    return this.http.get<Order>(`${this.apiUrl}/order/`, this.getAuthHeaderOptions());
+  getOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.apiUrl}/order/`, this.getAuthHeaderOptions());
   }
   getOrdersById(ID: string): Observable<Order> {
     return this.http.get<Order>(`${this.apiUrl}/order/${ID}`, this.getAuthHeaderOptions());

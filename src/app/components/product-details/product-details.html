@@ -11,11 +11,27 @@
         <p class="text-gray-600 mb-6 pl-2">
           {{ productDetails.description }}
         </p>
-        <div class="flex my-3 ">
-          @for(i of productDetails.sizes ;track $index){
-          <div class="border border-black rounded-full mr-2 px-2 py- w-fit">{{i}}</div>
-          }
-        </div>
+
+@if (openMenuFor === productDetails._id) {
+  <div class="flex gap-3 py-2">
+
+    @for (i of productDetails.sizes; track $index) {
+      <div
+        class="border border-black rounded-md px-2 w-fit transition-all cursor-pointer"
+        (click)="addToCart(productDetails._id, i); $event.stopPropagation()"
+        [ngClass]="
+          isInCart(productDetails._id)
+            ? 'bg-black text-white hover:text-black'
+            : 'hover:bg-black hover:text-white'
+        "
+      >
+        {{ i }}
+      </div>
+    }
+
+  </div>
+}
+     
         @if(productDetails.discountedPrice){
         <h5 class="text-2xl font-bold text-primary">
           {{ productDetails.discountedPrice | currency : 'EGP' }}

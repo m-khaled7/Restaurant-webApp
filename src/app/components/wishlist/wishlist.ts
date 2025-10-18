@@ -16,6 +16,8 @@ import {cartItem}from "../../models/cart-model"
 export class Wishlist implements OnInit {
   whishlist: WishlistModel | null=null
   cartIDs: Set<string> = new Set();
+  openMenuFor: string | null = null;
+
   constructor(
     private _UserService: UserService,
     private _Router: Router
@@ -33,6 +35,10 @@ export class Wishlist implements OnInit {
     });
   }
 
+  toggleMenu(id: string) {
+    this.openMenuFor = this.openMenuFor === id ? null : id;
+  }
+
   deleteItem(ID: string) {
     this._UserService.deleteFromWishlist(ID)
   }
@@ -41,11 +47,17 @@ export class Wishlist implements OnInit {
     return this.cartIDs.has(productId);
   }
 
+  addToCart(prodID:string,size:string){
+    this._UserService.addToCart(prodID,size)
+    this.toggleMenu(prodID)
+
+  }
+
   cart(prodID: string) {
     if (this.isInCart(prodID)) {
       this._UserService.deleteFromCart(prodID);
     } else {
-      this._UserService.addToCart(prodID);
+       this.toggleMenu(prodID)
     }
   }
 

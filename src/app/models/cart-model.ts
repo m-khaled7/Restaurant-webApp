@@ -16,4 +16,5 @@ _id: string;
       product: ProductModel;
       priceAtAdd: number;
       quantity: number;
+      sizes:string
 }

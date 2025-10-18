@@ -52,6 +52,23 @@
           >
             <i class="fa-solid fa-cart-shopping"></i>
           </button>
+          @if (openMenuFor === item.product._id) {
+      <div class="flex gap-3 py-2">
+         @for (i of item.product.sizes; track $index) {
+      <div
+        class="border border-black rounded-md px-2 w-fit transition-all cursor-pointer"
+        (click)="addToCart(item.product._id, i); $event.stopPropagation()"
+        [ngClass]="
+          isInCart(item.product._id)
+            ? 'bg-black text-white hover:text-black'
+            : 'hover:bg-black hover:text-white'
+        "
+      >
+        {{ i }}
+      </div>
+    }
+      </div>
+      }
         </div>
 
         <!-- Action -->

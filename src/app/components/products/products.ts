@@ -36,6 +36,7 @@ export class Products implements OnInit {
   currentPage: number = 1;
   totalPages: number = 1;
   sizes: string[] = ['small', 'medium', 'large'];
+  openMenuFor: string | null = null;
   constructor(
     private _ProductService: ProductService,
     private _NotificationService: NotificationService,
@@ -229,6 +230,10 @@ export class Products implements OnInit {
       .map((x, i) => i + 1);
   }
 
+  toggleMenu(id: string) {
+    this.openMenuFor = this.openMenuFor === id ? null : id;
+  }
+
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
   }
@@ -257,12 +262,18 @@ export class Products implements OnInit {
     }
   }
 
+  addToCart(prodID:string,size:string){
+    this._UserService.addToCart(prodID,size)
+    this.toggleMenu(prodID)
+
+  }
+
   cart(prodID: string) {
     if (this.isLogin) {
       if (this.isInCart(prodID)) {
         this._UserService.deleteFromCart(prodID);
       } else {
-        this._UserService.addToCart(prodID);
+        this.toggleMenu(prodID)
       }
     } else {
       this._NotificationService.show('ERROR', 'please Login frist', 'error');

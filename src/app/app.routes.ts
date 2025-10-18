@@ -20,6 +20,7 @@ import { Order } from './components/order/order';
 import { SuccessOrder } from './components/success-order/success-order';
 import { FaildPayment } from './components/faild-payment/faild-payment';
 import { OrderDetails } from './components/order-details/order-details';
+import { Orders } from './components/orders/orders';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -54,6 +55,8 @@ export const routes: Routes = [
   { path: 'cart', canActivate: [authGuard], component: Cart, title: 'My Cart' },
   { path: 'order', canActivate: [authGuard], component: Order, title: 'order checkout' },
   { path: 'order/:id', canActivate: [authGuard], component: OrderDetails, title: 'Order Details' },
+  { path: 'orders', canActivate: [authGuard], component: Orders, title: 'orders' },
+  
   {
     path: 'payment-success',
     canActivate: [authGuard],

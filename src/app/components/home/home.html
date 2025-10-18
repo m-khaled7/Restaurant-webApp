@@ -21,10 +21,10 @@
   <h2 class="text-3xl font-light text-center my-12">Our Special Offers</h2>
 
 
-  <swiper-container [slidesPerView]="5" [loop]="true" autoplay="true" [breakpoints]="breakpoints" class="h-96">
+  <swiper-container [slidesPerView]="5" [loop]="true" autoplay="true" [breakpoints]="breakpoints" class="">
     @for (product of productsOffers; track $index) {
     <swiper-slide>
-      <div class="bg-white w-72 rounded-2xl p-4 shadow-md cursor-pointer relative" (click)="details(product._id)">
+      <div class="bg-white w-80 rounded-2xl p-4 shadow-md cursor-pointer relative" (click)="details(product._id)">
         <img class="w-full h-60 bg-second rounded-lg object-cover" [src]="product.image[0]" alt="" />
         <div class="absolute top-5 left-5">
           <img class="h-15 w-15" src="offer.png" alt="">
@@ -32,20 +32,55 @@
         </div>
         <div class="py-1">
           <h1 class="text-lg font-bold py-1">{{ product?.name }}</h1>
-          @if(product?.discountedPrice){
-          <h5 class="text-xl font-bold text-primary py-1">
-            {{ product?.discountedPrice | currency : 'EGP' }}
-            <span class="text-sm text-gray-400 line-through">{{
-              product?.price | currency : 'EGP'
-              }}</span>
-          </h5>
+          <p class="text-xs text-gray-500 mb-2 text-pretty">{{ product.description }}</p>
+          @if (openMenuFor === product._id) {
+          <div class="flex gap-3 py-2">
+            @for (i of product.sizes; track $index) {
+      <div
+        class="border border-black rounded-md px-2 w-fit transition-all cursor-pointer"
+        (click)="addToCart(product._id, i); $event.stopPropagation()"
+        [ngClass]="
+          isInCart(product._id)
+            ? 'bg-black text-white hover:text-black'
+            : 'hover:bg-black hover:text-white'
+        "
+      >
+        {{ i }}
+      </div>
+    }
 
-          }@else{
-          <h5 class="text-xl font-bold text-primary py-1">
-            {{ product?.price | currency : 'EGP' }}
-          </h5>
-
+          </div>
           }
+          <div class="flex justify-between items-center">
+            <div class="flex items-baseline">
+              @if(product.discountedPrice){
+              <h5 class="text-base sm:text-lg font-bold text-black mr-2">
+                {{ product.discountedPrice | currency : 'EGP' }}
+              </h5>
+              <span class="text-xs text-gray-400 line-through">{{ product.price }}</span>
+              } @else {
+              <h5 class="text-base sm:text-lg font-bold text-black">
+                {{ product.price | currency : 'EGP' }}
+              </h5>
+              }
+            </div>
+            <div class="flex">
+              <button
+                class="w-8 h-8 flex items-center justify-center bg-white bg-opacity-80 rounded-full border hover:text-primary-70 border-gray-300 cursor-pointer disabled:hover:text-gray-300 disabled:cursor-not-allowed"
+                (click)="wishlist(product._id); $event.stopPropagation()" [disabled]="!isLogin">
+
+                <i [ngClass]="
+                    isInWishlist(product._id) ? 'text-primary fa-solid' : 'text-black fa-regular'
+                  " class="fa-heart "></i>
+              </button>
+              <button
+                class="w-8 h-8 flex items-center ml-4 justify-center  bg-opacity-80 rounded-full border border-gray-300  hover:text-primary cursor-pointer disabled:cursor-not-allowed disabled:hover:text-gray-500 "
+                (click)="cart(product._id); $event.stopPropagation()" [disabled]="!isLogin || product.quantity == 0 "
+                [ngClass]="isInCart(product._id) ? 'bg-black text-white' : 'bg-white text-gray-500'">
+                <i class="fa-solid fa-cart-shopping"></i>
+              </button>
+            </div>
+          </div>
         </div>
         <div class="font-bold text-lg"> Ends At <span class="text-md  text-red-500">{{product.offerId.endDate | date}}
           </span></div>
@@ -57,26 +92,60 @@
 </div>
 
 <h2 class="text-3xl font-light text-center my-12">Explore our products</h2>
-<div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12 w-fit mx-auto">
+<div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5  gap-12 w-fit mx-auto">
   @for (product of productsList; track $index) {
   <div class="bg-white w-72 rounded-2xl p-4 shadow-md hover:shadow-lg cursor-pointer" (click)="details(product._id)">
     <img class="w-full h-60 bg-second rounded-lg object-cover" [src]="product.image[0]" alt="" />
     <div class="py-1">
       <h1 class="text-lg font-bold py-1">{{ product?.name }}</h1>
-      @if(product?.discountedPrice){
-      <h5 class="text-xl font-bold text-primary py-1">
-        {{ product?.discountedPrice | currency : 'EGP' }}
-        <span class="text-sm text-gray-400 line-through">{{
-          product?.price | currency : 'EGP'
-          }}</span>
-      </h5>
-
-      }@else{
-      <h5 class="text-xl font-bold text-primary py-1">
-        {{ product?.price | currency : 'EGP' }}
-      </h5>
-
+      <p class="text-xs text-gray-500 mb-2 text-pretty">{{ product.description }}</p>
+      @if (openMenuFor === product._id) {
+      <div class="flex gap-3 py-2">
+         @for (i of product.sizes; track $index) {
+      <div
+        class="border border-black rounded-md px-2 w-fit transition-all cursor-pointer"
+        (click)="addToCart(product._id, i); $event.stopPropagation()"
+        [ngClass]="
+          isInCart(product._id)
+            ? 'bg-black text-white hover:text-black'
+            : 'hover:bg-black hover:text-white'
+        "
+      >
+        {{ i }}
+      </div>
+    }
+      </div>
       }
+      <div class="flex justify-between items-center">
+        <div class="flex items-baseline">
+          @if(product.discountedPrice){
+          <h5 class="text-base sm:text-lg font-bold text-black mr-2">
+            {{ product.discountedPrice | currency : 'EGP' }}
+          </h5>
+          <span class="text-xs text-gray-400 line-through">{{ product.price }}</span>
+          } @else {
+          <h5 class="text-base sm:text-lg font-bold text-black">
+            {{ product.price | currency : 'EGP' }}
+          </h5>
+          }
+        </div>
+        <div class="flex">
+          <button
+            class="w-8 h-8 flex items-center justify-center bg-white bg-opacity-80 rounded-full border hover:text-primary-70 border-gray-300 cursor-pointer disabled:hover:text-gray-300 disabled:cursor-not-allowed"
+            (click)="wishlist(product._id); $event.stopPropagation()" [disabled]="!isLogin">
+
+            <i [ngClass]="
+                    isInWishlist(product._id) ? 'text-primary fa-solid' : 'text-black fa-regular'
+                  " class="fa-heart "></i>
+          </button>
+          <button
+            class="w-8 h-8 flex items-center ml-4 justify-center  bg-opacity-80 rounded-full border border-gray-300  hover:text-primary cursor-pointer disabled:cursor-not-allowed disabled:hover:text-gray-500 "
+            (click)="cart(product._id); $event.stopPropagation()" [disabled]="!isLogin || product.quantity == 0 "
+            [ngClass]="isInCart(product._id) ? 'bg-black text-white' : 'bg-white text-gray-500'">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   }
@@ -94,7 +163,7 @@
   <!-- Title -->
   <h2 class="text-3xl font-semibold text-center mb-12">Why People Choose us?</h2>
 
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+  <div class="grid grid-cols-1 lg:grid-cols-2  gap-10 items-center">
     <!-- Left Image -->
     <div>
       <img src="chooseus.png" alt="Food" class="w-full rounded-3xl object-cover" />

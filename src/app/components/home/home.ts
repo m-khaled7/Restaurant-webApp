@@ -5,6 +5,10 @@ import { Router, RouterLink } from '@angular/router';
 import { CurrencyPipe,DatePipe, NgClass } from '@angular/common';
 import { ProductService } from '../../services/product-service';
 import { Review,testimonial } from '../../models/review';
+import { UserService } from '../../services/user-service';
+import { AuthService } from '../../services/auth-service';
+import { WishlistItem } from '../../models/wishlist-model';
+import { cartItem } from '../../models/cart-model';
 
 @Component({
   selector: 'app-home',
@@ -61,18 +65,45 @@ export class Home implements OnInit {
       spaceBetween: 10,
     },
   };
-
+  wishlistIDs: Set<string> = new Set();
+  cartIDs: Set<string> = new Set();
   productsList: ProductModel[] = [];
   productsOffers:ProductModel[]=[]
   testimonials: testimonial[] = [];
+  isLogin: boolean = false;
+  openMenuFor: string | null = null;
   stars: number[] = [1, 2, 3, 4, 5];
   constructor(
     private _ProductService: ProductService,
     private _NotificationService: NotificationService,
-    private _Router: Router
-  ) {}
+    private _Router: Router,
+    private _UserService:UserService,
+    private _AuthService:AuthService
+
+  ){}
 
   ngOnInit(): void {
+    this._AuthService.userData.subscribe({
+      next: () => {
+        if (this._AuthService.userData.getValue() != null) {
+          this.isLogin = true;
+        } else {
+          this.isLogin = false;
+        }
+      },
+    });
+    if (this.isLogin) {
+          this._UserService.wishlist.subscribe({
+            next: (w) => {
+              this.wishlistIDs = new Set(w?.items?.map((item: WishlistItem) => item.product._id));
+            },
+          });
+          this._UserService.cart.subscribe({
+            next: (w) => {
+              this.cartIDs = new Set(w?.items?.map((item: cartItem) => item.product._id));
+            },
+          });
+        }
     this.loadProducts();
     this.getTestimonials();
     this.loadProductsOffers()
@@ -116,4 +147,48 @@ export class Home implements OnInit {
   details(ID: string) {
     this._Router.navigate(['/menu/' + ID]);
   }
+
+
+  toggleMenu(id: string) {
+    this.openMenuFor = this.openMenuFor === id ? null : id;
+  }
+
+  isInWishlist(productId: string): boolean {
+    return this.wishlistIDs.has(productId);
+  }
+
+  isInCart(productId: string): boolean {
+    return this.cartIDs.has(productId);
+  }
+
+  wishlist(prodID: string) {
+    if (this.isLogin) {
+      if (this.isInWishlist(prodID)) {
+        this._UserService.deleteFromWishlist(prodID);
+      } else {
+        this._UserService.addToWishlist(prodID);
+      }
+    } else {
+      this._NotificationService.show('ERROR', 'please Login frist', 'error');
+    }
+  }
+
+addToCart(prodID:string,size:string){
+    this._UserService.addToCart(prodID,size)
+    this.toggleMenu(prodID)
+
+  }
+
+  cart(prodID: string) {
+    if (this.isLogin) {
+      if (this.isInCart(prodID)) {
+        this._UserService.deleteFromCart(prodID);
+      } else {
+         this.toggleMenu(prodID)
+      }
+    } else {
+      this._NotificationService.show('ERROR', 'please Login frist', 'error');
+    }
+  }
+
 }
